@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Public portfolios are indexable; the admin area is not.
+Disallow: /admin/
+
+Sitemap: /sitemap.xml

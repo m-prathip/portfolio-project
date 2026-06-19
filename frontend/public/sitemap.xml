@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Static sitemap for the publisher's own pages. Individual /u/:username
+  portfolios are user-generated and should be added here (or generated
+  dynamically at build/deploy time) as accounts are created.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>/admin/login</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>/admin/signup</loc><changefreq>monthly</changefreq><priority>0.3</priority></url>
+</urlset>
