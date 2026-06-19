@@ -59,8 +59,18 @@ const Landing = () => {
         </section>
       </main>
 
-      <footer className="border-t border-gray-100 dark:border-gray-800 py-6">
-        <p className="text-center text-sm text-gray-400">© {new Date().getFullYear()} Portfolio Hub</p>
+      {/* Updated Footer Section */}
+      <footer className="border-t border-gray-100 dark:border-gray-800 py-6 text-center text-sm text-gray-400 space-y-1">
+        <p>© {new Date().getFullYear()} Student Portfolio</p>
+        <p>
+          Questions? Contact us at{' '}
+          <a 
+            href="mailto:contact.prathip@gmail.com" 
+            className="text-primary-600 dark:text-primary-400 hover:underline font-medium"
+          >
+            contact.prathip@gmail.com
+          </a>
+        </p>
       </footer>
     </div>
   );
