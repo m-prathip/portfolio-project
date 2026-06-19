@@ -8,6 +8,14 @@
     "dev:frontend": "cd frontend && npm run dev",
     "build:frontend": "cd frontend && npm run build"
   },
-  "keywords": ["portfolio", "react", "nodejs", "mongodb"],
-  "license": "MIT"
+  "keywords": [
+    "portfolio",
+    "react",
+    "nodejs",
+    "mongodb"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
 }
