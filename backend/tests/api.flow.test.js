@@ -2,7 +2,7 @@
 process.env.JWT_SECRET = 'test-access';
 process.env.OTP_PEPPER = 'test-pepper';
 process.env.NODE_ENV = 'test';
-process.env.FRONTEND_URL = 'http://localhost:5173';
+process.env.FRONTEND_URL = 'https://portfolio-project-prathip.vercel.app';
 
 const { MongoMemoryServer } = require('mongodb-memory-server');
 const mongoose = require('mongoose');

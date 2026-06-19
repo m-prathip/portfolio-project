@@ -41,7 +41,7 @@ cd backend  && npm install && cp .env.example .env && npm run dev
 cd frontend && npm install --legacy-peer-deps && npm run dev
 
 # or everything via Docker
-docker compose up --build      # → http://localhost:8080
+docker compose up --build      # → https://portfolio-project-prathip.vercel.app
 ```
 
 ## Test it

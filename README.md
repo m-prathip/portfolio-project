@@ -72,7 +72,7 @@ npm run dev
 cd portfolio-project/frontend
 npm install
 cp .env.example .env
-# Set VITE_API_URL=http://localhost:5000
+# Set VITE_API_URL=https://student-portfolio-ckpc.onrender.com
 npm run dev
 ```
 
@@ -80,12 +80,12 @@ npm run dev
 
 There's no separate "admin setup" step anymore — anyone can create an account:
 
-1. Visit `http://localhost:5173/admin/signup`
+1. Visit `https://portfolio-project-prathip.vercel.app`
 2. Pick a username (this becomes your permanent portfolio URL), email, and password
 3. You're redirected straight to **Share Your Portfolio**, showing your link and QR code
 
-Visit `http://localhost:5173` for the publisher homepage, `http://localhost:5173/u/<username>`
-for any published portfolio, and `http://localhost:5173/admin` for the dashboard.
+Visit `https://portfolio-project-prathip.vercel.app` for the publisher homepage, `https://portfolio-project-prathip.vercel.app/u/<username>`
+for any published portfolio, and `https://portfolio-project-prathip.vercel.app` for the dashboard.
 
 ---
 
@@ -200,12 +200,12 @@ PORT=5000
 MONGO_URI=mongodb+srv://<user>:<pass>@cluster0.mongodb.net/portfolio
 JWT_SECRET=super_secret_random_string_here
 NODE_ENV=development
-FRONTEND_URL=http://localhost:5173
+FRONTEND_URL=https://portfolio-project-prathip.vercel.app
 ```
 
 **Frontend `.env`**
 ```env
-VITE_API_URL=http://localhost:5000
+VITE_API_URL=https://student-portfolio-ckpc.onrender.com
 ```
 
 ---

@@ -10,7 +10,7 @@ export OTP_PEPPER=$(openssl rand -hex 32)
 docker compose up --build
 ```
 - Frontend: http://localhost:8080  (nginx serves the SPA + proxies `/api`)
-- Backend:  http://localhost:5000
+- Backend:  https://student-portfolio-ckpc.onrender.com
 - MongoDB:  localhost:27017 (data persisted in the `mongo_data` volume)
 
 No SMTP set → OTP/emails print to the backend container logs (`docker compose logs backend`).

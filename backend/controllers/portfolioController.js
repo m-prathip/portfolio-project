@@ -2,7 +2,7 @@ const QRCode = require('qrcode');
 
 // The link encoded in the QR code points at the FRONTEND app (where
 // /u/:username is actually rendered), not at this API.
-const FRONTEND_URL = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, '');
+const FRONTEND_URL = (process.env.FRONTEND_URL || 'https://portfolio-project-prathip.vercel.app').replace(/\/$/, '');
 
 const buildPortfolioUrl = (username) => `${FRONTEND_URL}/u/${username}`;
 
