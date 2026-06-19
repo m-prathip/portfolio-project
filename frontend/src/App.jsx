@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
+import { Analytics } from '@vercel/analytics/react';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
@@ -30,6 +31,7 @@ const App = () => (
     <AuthProvider>
       <BrowserRouter>
         <Toaster position="top-right" toastOptions={{ duration: 3000, style: { borderRadius: '10px' } }} />
+        <Analytics />
         <Routes>
           {/* Platform landing page */}
           <Route path="/" element={<Landing />} />
