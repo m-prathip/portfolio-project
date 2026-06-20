@@ -11,23 +11,19 @@ let transporter = null;
 
 if (hasSmtp) {
   transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT || 587),
-    secure: false,
+  host: process.env.SMTP_HOST,
+  port: Number(process.env.SMTP_PORT) || 587,
+  secure: false,
+  requireTLS: true,
 
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
-    },
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  },
 
-    tls: {
-      rejectUnauthorized: false
-    },
-
-    connectionTimeout: 60000,
-    greetingTimeout: 60000,
-    socketTimeout: 60000
-  });
+  logger: true,
+  debug: true
+});
 
   transporter.verify((err) => {
     if (err) {
