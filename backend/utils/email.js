@@ -1,4 +1,19 @@
 const nodemailer = require('nodemailer');
+const dns = require('dns');
+
+console.log('SMTP_HOST =', process.env.SMTP_HOST);
+console.log('SMTP_PORT =', process.env.SMTP_PORT);
+console.log('SMTP_USER =', process.env.SMTP_USER);
+console.log('SMTP_PASS exists =', !!process.env.SMTP_PASS);
+
+dns.lookup(process.env.SMTP_HOST, (err, address) => {
+  if (err) {
+    console.error('DNS Error:', err);
+  } else {
+    console.log('SMTP DNS:', address);
+  }
+});
+
 const FROM = process.env.EMAIL_FROM || 'Portfolio Publisher <no-reply@yourapp.com>';
 const BRAND = (FROM.match(/^"?([^"<]+?)"?\s*</) || [, 'Portfolio Publisher'])[1].trim();
 const FRONTEND_URL = (process.env.FRONTEND_URL || 'https://portfolio-project-prathip.vercel.app').split(',')[0].replace(/\/$/, '');
