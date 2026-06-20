@@ -19,6 +19,8 @@ if (hasSmtp) {
     socketTimeout: 60000
   });
 
+  console.log("SMTP_PASS exists =", !!process.env.SMTP_PASS);
+
   transporter.verify((err) => {
     if (err) {
       console.error('❌ SMTP VERIFY FAILED:', err);
