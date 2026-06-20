@@ -6,12 +6,25 @@ const FRONTEND_URL = (process.env.FRONTEND_URL || 'https://portfolio-project-pra
 const hasSmtp = !!process.env.SMTP_HOST;
 
 let transporter = null;
+
 if (hasSmtp) {
   transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT || 587),
-    secure: process.env.SMTP_SECURE === 'true',
-    auth: process.env.SMTP_USER ? { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS } : undefined
+    service: 'gmail',
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS
+    },
+    connectionTimeout: 60000,
+    greetingTimeout: 60000,
+    socketTimeout: 60000
+  });
+
+  transporter.verify((err) => {
+    if (err) {
+      console.error('❌ SMTP VERIFY FAILED:', err);
+    } else {
+      console.log('✅ SMTP READY');
+    }
   });
 }
 
