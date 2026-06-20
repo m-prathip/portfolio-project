@@ -1,24 +1,33 @@
 const nodemailer = require('nodemailer');
-
 const FROM = process.env.EMAIL_FROM || 'Portfolio Publisher <no-reply@yourapp.com>';
 const BRAND = (FROM.match(/^"?([^"<]+?)"?\s*</) || [, 'Portfolio Publisher'])[1].trim();
 const FRONTEND_URL = (process.env.FRONTEND_URL || 'https://portfolio-project-prathip.vercel.app').split(',')[0].replace(/\/$/, '');
-const hasSmtp = !!process.env.SMTP_HOST;
+const hasSmtp =
+  process.env.SMTP_HOST &&
+  process.env.SMTP_USER &&
+  process.env.SMTP_PASS;
 
 let transporter = null;
 
 if (hasSmtp) {
   transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT || 587),
+    secure: false,
+
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS
-    }
-  });
+    },
 
-  console.log("SMTP_PASS exists =", !!process.env.SMTP_PASS);
+    tls: {
+      rejectUnauthorized: false
+    },
+
+    connectionTimeout: 60000,
+    greetingTimeout: 60000,
+    socketTimeout: 60000
+  });
 
   transporter.verify((err) => {
     if (err) {
@@ -34,14 +43,30 @@ if (hasSmtp) {
  * fallback) so the whole flow stays testable without a mail server.
  */
 async function sendMail({ to, subject, html, text }) {
-  if (!transporter) {
-    console.log('\n──────── 📧 EMAIL (dev fallback) ────────');
-    console.log(`To: ${to}\nSubject: ${subject}`);
-    if (text) console.log(`Text: ${text}`);
-    console.log('─────────────────────────────────────────\n');
-    return { dev: true };
+  try {
+    if (!transporter) {
+      console.log('\n──────── 📧 EMAIL (dev fallback) ────────');
+      console.log(`To: ${to}`);
+      console.log(`Subject: ${subject}`);
+      if (text) console.log(text);
+      console.log('─────────────────────────────────────────\n');
+      return { dev: true };
+    }
+
+    const info = await transporter.sendMail({
+      from: FROM,
+      to,
+      subject,
+      html,
+      text
+    });
+
+    console.log('✅ Email sent:', info.messageId);
+    return info;
+  } catch (error) {
+    console.error('❌ EMAIL SEND ERROR:', error);
+    throw error;
   }
-  return transporter.sendMail({ from: FROM, to, subject, html, text });
 }
 
 // ── Premium, responsive, dark-mode-aware email shell ───────────────────
