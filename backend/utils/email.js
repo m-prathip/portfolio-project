@@ -1,11 +1,10 @@
-const SibApiV3Sdk = require('@getbrevo/brevo');
+const brevo = require('@getbrevo/brevo');
 
-const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
+console.log("BREVO_API_KEY exists =", !!process.env.BREVO_API_KEY);
 
-apiInstance.setApiKey(
-  SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
-  process.env.BREVO_API_KEY
-);
+const client = new brevo.BrevoClient({
+  apiKey: process.env.BREVO_API_KEY
+});
 
 const FROM = process.env.EMAIL_FROM || 'Portfolio Publisher <no-reply@yourapp.com>';
 const BRAND = (FROM.match(/^"?([^"<]+?)"?\s*</) || [, 'Portfolio Publisher'])[1].trim();
@@ -17,26 +16,26 @@ const FRONTEND_URL = (process.env.FRONTEND_URL || 'https://portfolio-project-pra
  * fallback) so the whole flow stays testable without a mail server.
  */
 async function sendMail({ to, subject, html, text }) {
+  console.log("Sending email to:", to);
+
   try {
-    const result = await apiInstance.sendTransacEmail({
+    const result = await client.transactionalEmails.sendTransacEmail({
       sender: {
         name: BRAND,
-        email: 'portfoliopublisher@gmail.com'
+        email: "portfoliopublisher@gmail.com"
       },
-      to: [
-        {
-          email: to
-        }
-      ],
+      to: [{ email: to }],
       subject,
       htmlContent: html,
-      textContent: text
+      textContent: text || ""
     });
 
-    console.log('✅ Email sent');
+    console.log("✅ Email sent:", result);
     return result;
+
   } catch (error) {
-    console.error('❌ Brevo API Error:', error);
+    console.error("❌ Brevo API Error:");
+    console.error(error);
     throw error;
   }
 }
