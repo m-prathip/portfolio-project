@@ -76,21 +76,37 @@ const register = async (req, res) => {
       return res.status(400).json({ message: `${field} is already registered` });
     }
 
-    const user = await User.create({ username: cleanUsername, email: cleanEmail, password, isVerified: false });
-    await createAndSendOtp({ user, email: cleanEmail, purpose: 'verify' });
+    const user = await User.create({
+  username: cleanUsername,
+  email: cleanEmail,
+  password,
+  isVerified: false
+});
 
-    res.status(201).json({
-      message: 'Account created. Check your email for a verification code.',
-      email: cleanEmail, requiresVerification: true
-    });
-  } catch (error) {
-    if (error.code === 11000) {
-      const field = Object.keys(error.keyPattern || {})[0] || 'Field';
-      return res.status(400).json({ message: `That ${field} is already taken` });
-    }
-    res.status(500).json({ message: error.message });
-  }
-};
+try {
+  await sendMail({ to: email, ...tpl });
+  console.log('OTP EMAIL SENT TO:', email);
+} catch (err) {
+  console.error('OTP EMAIL FAILED:', err);
+  throw err;
+}
+
+res.status(201).json({
+  message: 'Account created. Check your email for a verification code.',
+  email: cleanEmail,
+  requiresVerification: true
+});
+ } catch (error) {
+  console.error('REGISTER ERROR:', error);
+
+  res.status(500).json({
+    message: error.message,
+    stack: process.env.NODE_ENV !== 'production'
+      ? error.stack
+      : undefined
+  });
+}
+}; 
 
 // ── VERIFY EMAIL OTP (activates account, logs the user in) ─
 const verifyEmail = async (req, res) => {
