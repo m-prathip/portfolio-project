@@ -19,6 +19,8 @@ const adminNav = [
 ];
 
 const AdminLayout = () => {
+  console.log("AdminLayout Render");
+  
   const { logout, user } = useAuth();
   const { dark, toggle } = useTheme();
   const navigate = useNavigate();

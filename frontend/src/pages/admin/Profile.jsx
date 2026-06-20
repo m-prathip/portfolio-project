@@ -61,6 +61,8 @@ const AdminProfile = () => {
 }, []);
 
   const handleChange = (e) => {
+    console.log("Typing:", e.target.name, e.target.value);
+
     const { name, value } = e.target;
 
     setForm((prev) => ({
