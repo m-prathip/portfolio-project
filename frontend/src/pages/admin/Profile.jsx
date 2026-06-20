@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import Spinner from '../../components/common/Spinner';
 
 const AdminProfile = () => {
+  console.log("AdminProfile Render");
   const [form, setForm] = useState({
     name: '',
     title: '',

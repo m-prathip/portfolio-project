@@ -56,6 +56,7 @@ export const AuthProvider = ({ children }) => {
     setAccessToken(null);
     setUser(null);
   };
+  console.log("AuthContext Render", user);
 
   return (
     <AuthContext.Provider value={{
