@@ -5,6 +5,7 @@ import Spinner from '../../components/common/Spinner';
 
 const AdminProfile = () => {
   console.log("AdminProfile Render");
+
   const [form, setForm] = useState({
     name: '',
     title: '',
@@ -32,33 +33,32 @@ const AdminProfile = () => {
   const [current, setCurrent] = useState(null);
 
   useEffect(() => {
-    profileAPI
-      .getMine()
-      .then((res) => {
-        const p = res.data;
+  console.log("PROFILE API CALLED");
 
-        setCurrent(p);
-
-        setForm({
-          name: p.name || '',
-          title: p.title || '',
-          about: p.about || '',
-          email: p.email || '',
-          phone: p.phone || '',
-          location: p.location || '',
-          domains: p.domains?.join(', ') || '',
-          social: {
-            linkedin: p.social?.linkedin || '',
-            github: p.social?.github || '',
-            portfolio: p.social?.portfolio || '',
-            twitter: p.social?.twitter || '',
-            instagram: p.social?.instagram || ''
-          }
-        });
-      })
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, []);
+  profileAPI.getMine()
+    .then(res => {
+      const p = res.data;
+      setCurrent(p);
+      setForm({
+        name: p.name || '',
+        title: p.title || '',
+        about: p.about || '',
+        email: p.email || '',
+        phone: p.phone || '',
+        location: p.location || '',
+        domains: p.domains?.join(', ') || '',
+        social: {
+          linkedin: p.social?.linkedin || '',
+          github: p.social?.github || '',
+          portfolio: p.social?.portfolio || '',
+          twitter: p.social?.twitter || '',
+          instagram: p.social?.instagram || ''
+        }
+      });
+    })
+    .catch(() => {})
+    .finally(() => setLoading(false));
+}, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
