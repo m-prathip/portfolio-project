@@ -1,53 +1,16 @@
-const nodemailer = require('nodemailer');
-const dns = require('dns');
+const SibApiV3Sdk = require('@getbrevo/brevo');
 
-console.log('SMTP_HOST =', process.env.SMTP_HOST);
-console.log('SMTP_PORT =', process.env.SMTP_PORT);
-console.log('SMTP_USER =', process.env.SMTP_USER);
-console.log('SMTP_PASS exists =', !!process.env.SMTP_PASS);
+const apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
-dns.lookup(process.env.SMTP_HOST, (err, address) => {
-  if (err) {
-    console.error('DNS Error:', err);
-  } else {
-    console.log('SMTP DNS:', address);
-  }
-});
+apiInstance.setApiKey(
+  SibApiV3Sdk.TransactionalEmailsApiApiKeys.apiKey,
+  process.env.BREVO_API_KEY
+);
 
 const FROM = process.env.EMAIL_FROM || 'Portfolio Publisher <no-reply@yourapp.com>';
 const BRAND = (FROM.match(/^"?([^"<]+?)"?\s*</) || [, 'Portfolio Publisher'])[1].trim();
 const FRONTEND_URL = (process.env.FRONTEND_URL || 'https://portfolio-project-prathip.vercel.app').split(',')[0].replace(/\/$/, '');
-const hasSmtp =
-  process.env.SMTP_HOST &&
-  process.env.SMTP_USER &&
-  process.env.SMTP_PASS;
 
-let transporter = null;
-
-if (hasSmtp) {
-  transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT) || 587,
-  secure: false,
-  requireTLS: true,
-
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS
-  },
-
-  logger: true,
-  debug: true
-});
-
-  transporter.verify((err) => {
-    if (err) {
-      console.error('❌ SMTP VERIFY FAILED:', err);
-    } else {
-      console.log('✅ SMTP READY');
-    }
-  });
-}
 
 /**
  * Sends an email. With no SMTP configured it logs to the console (dev
@@ -55,27 +18,25 @@ if (hasSmtp) {
  */
 async function sendMail({ to, subject, html, text }) {
   try {
-    if (!transporter) {
-      console.log('\n──────── 📧 EMAIL (dev fallback) ────────');
-      console.log(`To: ${to}`);
-      console.log(`Subject: ${subject}`);
-      if (text) console.log(text);
-      console.log('─────────────────────────────────────────\n');
-      return { dev: true };
-    }
-
-    const info = await transporter.sendMail({
-      from: FROM,
-      to,
+    const result = await apiInstance.sendTransacEmail({
+      sender: {
+        name: BRAND,
+        email: 'portfoliopublisher@gmail.com'
+      },
+      to: [
+        {
+          email: to
+        }
+      ],
       subject,
-      html,
-      text
+      htmlContent: html,
+      textContent: text
     });
 
-    console.log('✅ Email sent:', info.messageId);
-    return info;
+    console.log('✅ Email sent');
+    return result;
   } catch (error) {
-    console.error('❌ EMAIL SEND ERROR:', error);
+    console.error('❌ Brevo API Error:', error);
     throw error;
   }
 }
