@@ -49,7 +49,8 @@ async function createAndSendOtp({ user, email, purpose }) {
     { upsert: true, new: true, setDefaultsOnInsert: true }
   );
   const tpl = purpose === 'verify' ? emails.verifyOtp(code) : emails.resetOtp(code);
-  await sendMail({ to: email, ...tpl });
+  // Send email asynchronously so we don't block the API response
+  sendMail({ to: email, ...tpl }).catch(e => console.error("OTP Mail Error:", e));
 }
 
 // ── REGISTER (creates an UNVERIFIED account + sends OTP) ─
@@ -77,36 +78,32 @@ const register = async (req, res) => {
     }
 
     const user = await User.create({
-  username: cleanUsername,
-  email: cleanEmail,
-  password,
-  isVerified: false
-});
+      username: cleanUsername,
+      email: cleanEmail,
+      password,
+      isVerified: false
+    });
 
-try {
-  await sendMail({ to: email, ...tpl });
-  console.log('OTP EMAIL SENT TO:', email);
-} catch (err) {
-  console.error('OTP EMAIL FAILED:', err);
-  throw err;
-}
+    // Fire and forget the OTP sending to respond instantly
+    createAndSendOtp({ user, email: cleanEmail, purpose: 'verify' })
+      .catch(err => console.error('OTP EMAIL FAILED:', err));
 
-res.status(201).json({
-  message: 'Account created. Check your email for a verification code.',
-  email: cleanEmail,
-  requiresVerification: true
-});
- } catch (error) {
-  console.error('REGISTER ERROR:', error);
+    res.status(201).json({
+      message: 'Account created. Check your email for a verification code.',
+      email: cleanEmail,
+      requiresVerification: true
+    });
+  } catch (error) {
+    console.error('REGISTER ERROR:', error);
 
-  res.status(500).json({
-    message: error.message,
-    stack: process.env.NODE_ENV !== 'production'
-      ? error.stack
-      : undefined
-  });
-}
-}; 
+    res.status(500).json({
+      message: error.message,
+      stack: process.env.NODE_ENV !== 'production'
+        ? error.stack
+        : undefined
+    });
+  }
+};
 
 // ── VERIFY EMAIL OTP (activates account, logs the user in) ─
 const verifyEmail = async (req, res) => {
@@ -133,7 +130,7 @@ const verifyEmail = async (req, res) => {
     await Otp.deleteMany({ email });
 
     const accessToken = await issueSession(user, req, res); // saves user
-    sendMail({ to: email, ...emails.welcome(user.username) }).catch(() => {});
+    sendMail({ to: email, ...emails.welcome(user.username) }).catch(() => { });
 
     res.json({ message: 'Email verified', token: accessToken, user: publicUser(user) });
   } catch (error) {
@@ -185,7 +182,7 @@ const login = async (req, res) => {
 
     if (!user.isVerified) {
       await LoginActivity.create({ ...logBase, user: user._id, email: user.email, event: 'login_failed', reason: 'unverified' });
-      await createAndSendOtp({ user, email: user.email, purpose: 'verify' }).catch(() => {});
+      await createAndSendOtp({ user, email: user.email, purpose: 'verify' }).catch(() => { });
       return res.status(403).json({ message: 'Please verify your email first. We sent you a new code.', email: user.email, requiresVerification: true });
     }
 
@@ -193,7 +190,7 @@ const login = async (req, res) => {
     const seen = await LoginActivity.findOne({ user: user._id, event: 'login_success', device });
     if (!seen) {
       await LoginActivity.create({ ...logBase, user: user._id, email: user.email, event: 'new_device' });
-      sendMail({ to: user.email, ...emails.loginAlert(device, ip, new Date().toUTCString()) }).catch(() => {});
+      sendMail({ to: user.email, ...emails.loginAlert(device, ip, new Date().toUTCString()) }).catch(() => { });
     }
 
     user.lastLoginAt = new Date();
@@ -325,7 +322,7 @@ const resetPassword = async (req, res) => {
 
     const accessToken = await issueSession(user, req, res); // fresh session (auto-login)
     await LoginActivity.create({ user: user._id, email: user.email, event: 'password_reset', reason: 'completed', ip: getClientIp(req) });
-    sendMail({ to: user.email, ...emails.passwordChanged() }).catch(() => {});
+    sendMail({ to: user.email, ...emails.passwordChanged() }).catch(() => { });
 
     res.json({ message: 'Password updated', token: accessToken, user: publicUser(user) });
   } catch (error) {
