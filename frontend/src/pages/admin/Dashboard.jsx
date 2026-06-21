@@ -21,7 +21,7 @@ const adminNav = [
 
 const AdminLayout = () => {
   console.log("AdminLayout Render");
-  
+
   const { logout, user } = useAuth();
   const { dark, toggle } = useTheme();
   const navigate = useNavigate();
@@ -34,10 +34,9 @@ const AdminLayout = () => {
   };
 
   const linkCls = ({ isActive }) =>
-    `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-      isActive
-        ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
-        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
+    `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${isActive
+      ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-400'
+      : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white'
     }`;
 
   const Sidebar = ({ mobile = false }) => (

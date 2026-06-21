@@ -109,7 +109,7 @@ const Home = () => {
       {/* ───── HERO ───── */}
       <section className="relative min-h-screen flex items-center pt-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 w-full">
-          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+          <div className="grid grid-cols-2 gap-4 sm:gap-10 lg:gap-16 items-center">
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
               className="space-y-6">
               <span className="inline-flex items-center gap-2 bg-white/70 dark:bg-gray-800/60 backdrop-blur
@@ -117,13 +117,13 @@ const Home = () => {
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" /> Available for opportunities
               </span>
 
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight break-words">
+              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight break-words">
   Hi, I'm <span className="bg-gradient-to-r from-primary-600 to-accent bg-clip-text text-transparent">
     {profile?.name}
   </span>
 </h1>
 
-              <p className="text-xl sm:text-2xl text-gray-600 dark:text-gray-300 font-semibold h-8">
+              <p className="text-lg sm:text-2xl text-gray-600 dark:text-gray-300 font-semibold h-8">
                 {typed}<span className="text-primary-500 animate-pulse">|</span>
               </p>
 
@@ -164,7 +164,7 @@ const Home = () => {
             {/* Avatar + floating tech */}
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.15 }}
               className="relative mx-auto">
-              <div className="relative h-64 w-64 sm:h-80 sm:w-80">
+              <div className="relative h-32 w-32 sm:h-64 sm:w-64 lg:h-80 lg:w-80">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary-500 to-accent blur-2xl opacity-30 animate-pulse" />
                 {profile?.profileImage ? (
                   <img src={asset(profile.profileImage)} alt={profile?.name} loading="lazy"
@@ -176,7 +176,8 @@ const Home = () => {
                 )}
                 {topSkills.map((s, i) => {
                   const angle = (i / topSkills.length) * Math.PI * 2;
-                  const x = Math.cos(angle) * 150, y = Math.sin(angle) * 150;
+                  const radius = window.innerWidth < 640 ? 75 : 150;
+                  const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius;
                   return (
                     <motion.span key={s}
                       animate={{ y: [y, y - 10, y] }} transition={{ duration: 3 + i, repeat: Infinity, ease: 'easeInOut' }}

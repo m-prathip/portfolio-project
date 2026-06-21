@@ -16,6 +16,7 @@ const PortfolioLayout = lazy(() => import('./pages/PortfolioLayout'));
 const Home = lazy(() => import('./pages/Home'));
 const Education = lazy(() => import('./pages/Education'));
 const Projects = lazy(() => import('./pages/Projects'));
+const Certificates = lazy(() => import('./pages/Certificates'));
 
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
 const AdminSignup = lazy(() => import('./pages/admin/Signup'));
@@ -75,6 +76,7 @@ const App = () => (
                 <Route index element={<Home />} />
                 <Route path="education" element={<Education />} />
                 <Route path="projects" element={<Projects />} />
+                <Route path="certificates" element={<Certificates />} />
                 <Route path="*" element={<Navigate to="." replace />} />
               </Route>
 

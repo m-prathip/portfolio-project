@@ -20,15 +20,14 @@ const Navbar = ({ username, profile }) => {
     { to: base, label: 'Home' },
     { to: `${base}/education`, label: 'Education' },
     { to: `${base}/projects`, label: 'Projects' },
+    { to: `${base}/certificates`, label: 'Certificates' },
   ];
 
-  const navCls = `fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-    scrolled ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-sm' : 'bg-transparent'
-  }`;
+  const navCls = `fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-sm' : 'bg-transparent'
+    }`;
 
   const linkCls = ({ isActive }) =>
-    `text-sm font-medium transition-colors duration-200 ${
-      isActive ? 'text-primary-600 dark:text-primary-400' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
+    `text-sm font-medium transition-colors duration-200 ${isActive ? 'text-primary-600 dark:text-primary-400' : 'text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white'
     }`;
 
   return (
