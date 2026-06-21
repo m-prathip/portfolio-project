@@ -1,4 +1,11 @@
 const Profile = require('../models/Profile');
+const Skill = require('../models/Skill');
+const Project = require('../models/Project');
+const Experience = require('../models/Experience');
+const Education = require('../models/Education');
+const Achievement = require('../models/Achievement');
+const Certificate = require('../models/Certificate');
+const Activity = require('../models/Activity');
 
 // @desc   Get the logged-in user's own profile (for editing in the dashboard)
 // @route  GET /api/profile/me
@@ -37,9 +44,29 @@ const updateMyProfile = async (req, res) => {
 // @route  GET /api/profile/public/:username
 const getPublicProfile = async (req, res) => {
   try {
-    const profile = await Profile.findOne({ user: req.portfolioUser._id });
+    const userId = req.portfolioUser._id;
+    const profile = await Profile.findOne({ user: userId });
     if (!profile) return res.json({ username: req.portfolioUser.username, isSetup: false });
-    res.json({ ...profile.toObject(), username: req.portfolioUser.username, isSetup: true });
+    
+    // Fetch all related sections in parallel to avoid frontend waterfalls
+    const [skills, projects, experience, education, achievements, certificates, activities] = await Promise.all([
+      Skill.find({ user: userId }).sort('order'),
+      Project.find({ user: userId }).sort('order'),
+      Experience.find({ user: userId }).sort('-startDate'),
+      Education.find({ user: userId }).sort('-startDate'),
+      Achievement.find({ user: userId }).sort('-date'),
+      Certificate.find({ user: userId }).sort('order'),
+      Activity.find({ user: userId }).sort('-date')
+    ]);
+
+    res.json({ 
+      ...profile.toObject(), 
+      username: req.portfolioUser.username, 
+      isSetup: true,
+      collections: {
+        skills, projects, experience, education, achievements, certificates, activities
+      }
+    });
   } catch (err) { res.status(500).json({ message: err.message }); }
 };
 

@@ -18,11 +18,16 @@ const Projects = () => {
   const [tab, setTab] = useState('All');
 
   useEffect(() => {
-    projectsAPI.getPublic(username)
-      .then((res) => setProjects(res.data || []))
-      .catch(() => setProjects([]))
-      .finally(() => setLoading(false));
-  }, [username]);
+    if (profile?.collections?.projects) {
+      setProjects(profile.collections.projects);
+      setLoading(false);
+    } else {
+      projectsAPI.getPublic(username)
+        .then((res) => setProjects(res.data || []))
+        .catch(() => setProjects([]))
+        .finally(() => setLoading(false));
+    }
+  }, [profile, username]);
 
   // Build category tabs from the tech stacks across all projects.
   const tabs = useMemo(() => {

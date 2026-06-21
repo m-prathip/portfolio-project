@@ -27,17 +27,23 @@ const Home = () => {
   const [sent, setSent] = useState(false);
 
   useEffect(() => {
-    Promise.all([
-      skillsAPI.getPublic(username).catch(() => ({ data: [] })),
-      achievementsAPI.getPublic(username).catch(() => ({ data: [] })),
-      activitiesAPI.getPublic(username).catch(() => ({ data: [] })),
-      projectsAPI.getPublic(username).catch(() => ({ data: [] })),
-      experienceAPI.getPublic(username).catch(() => ({ data: [] })),
-      certificatesAPI.getPublic(username).catch(() => ({ data: [] }))
-    ]).then(([s, a, ac, p, e, c]) =>
-      setData({ skills: s.data, achievements: a.data, activities: ac.data, projects: p.data, experience: e.data, certificates: c.data })
-    ).finally(() => setLoading(false));
-  }, [username]);
+    if (profile?.collections) {
+      setData(profile.collections);
+      setLoading(false);
+    } else {
+      // Fallback for older backend versions
+      Promise.all([
+        skillsAPI.getPublic(username).catch(() => ({ data: [] })),
+        achievementsAPI.getPublic(username).catch(() => ({ data: [] })),
+        activitiesAPI.getPublic(username).catch(() => ({ data: [] })),
+        projectsAPI.getPublic(username).catch(() => ({ data: [] })),
+        experienceAPI.getPublic(username).catch(() => ({ data: [] })),
+        certificatesAPI.getPublic(username).catch(() => ({ data: [] }))
+      ]).then(([s, a, ac, p, e, c]) =>
+        setData({ skills: s.data, achievements: a.data, activities: ac.data, projects: p.data, experience: e.data, certificates: c.data })
+      ).finally(() => setLoading(false));
+    }
+  }, [profile, username]);
 
   if (loading) return <PageLoader />;
 

@@ -14,11 +14,16 @@ const Certificates = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    certificatesAPI.getPublic(username)
-      .then((res) => setCertificates(res.data || []))
-      .catch(() => setCertificates([]))
-      .finally(() => setLoading(false));
-  }, [username]);
+    if (profile?.collections?.certificates) {
+      setCertificates(profile.collections.certificates);
+      setLoading(false);
+    } else {
+      certificatesAPI.getPublic(username)
+        .then((res) => setCertificates(res.data || []))
+        .catch(() => setCertificates([]))
+        .finally(() => setLoading(false));
+    }
+  }, [profile, username]);
 
   if (loading) return <PageLoader />;
 

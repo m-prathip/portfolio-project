@@ -1,28 +1,35 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 import { FiCalendar, FiMapPin, FiAward, FiBriefcase } from 'react-icons/fi';
 import { educationAPI, experienceAPI, achievementsAPI } from '../services/api';
 import Section from '../components/common/Section';
 import { PageLoader } from '../components/common/Spinner';
 
 const Education = () => {
-  const { username } = useParams();
+  const { profile, username } = useOutletContext();
   const [education, setEducation] = useState([]);
   const [experience, setExperience] = useState([]);
   const [achievements, setAchievements] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      educationAPI.getPublic(username).catch(() => ({ data: [] })),
-      experienceAPI.getPublic(username).catch(() => ({ data: [] })),
-      achievementsAPI.getPublic(username).catch(() => ({ data: [] })),
-    ]).then(([e, ex, a]) => {
-      setEducation(e.data);
-      setExperience(ex.data);
-      setAchievements(a.data);
-    }).finally(() => setLoading(false));
-  }, [username]);
+    if (profile?.collections) {
+      setEducation(profile.collections.education || []);
+      setExperience(profile.collections.experience || []);
+      setAchievements(profile.collections.achievements || []);
+      setLoading(false);
+    } else {
+      Promise.all([
+        educationAPI.getPublic(username).catch(() => ({ data: [] })),
+        experienceAPI.getPublic(username).catch(() => ({ data: [] })),
+        achievementsAPI.getPublic(username).catch(() => ({ data: [] })),
+      ]).then(([e, ex, a]) => {
+        setEducation(e.data);
+        setExperience(ex.data);
+        setAchievements(a.data);
+      }).finally(() => setLoading(false));
+    }
+  }, [profile, username]);
 
   if (loading) return <PageLoader />;
 
