@@ -1,11 +1,11 @@
 const Profile = require('../models/Profile');
-const Skill = require('../models/Skill');
-const Project = require('../models/Project');
+const Skill = require('../models/Skills');
+const Project = require('../models/Projects');
 const Experience = require('../models/Experience');
 const Education = require('../models/Education');
-const Achievement = require('../models/Achievement');
+const Achievement = require('../models/Achievements');
 const Certificate = require('../models/Certificate');
-const Activity = require('../models/Activity');
+const Activity = require('../models/Activities');
 
 // @desc   Get the logged-in user's own profile (for editing in the dashboard)
 // @route  GET /api/profile/me
