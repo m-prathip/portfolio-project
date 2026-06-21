@@ -33,34 +33,20 @@ const Navbar = ({ username, profile }) => {
   return (
     <nav className={navCls}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-16">
-          <Link to={base} className="text-xl font-bold text-primary-600 dark:text-primary-400">
+        <div className="flex items-center justify-between h-16 w-full">
+          <Link to={base} className="text-lg sm:text-xl font-bold text-primary-600 dark:text-primary-400 shrink-0">
             {profile?.name ? profile.name.split(' ')[0] : 'Portfolio'}
           </Link>
 
-          {/* Desktop Links */}
-          <div className="hidden md:flex items-center gap-8">
-            {links.map(l => <NavLink key={l.to} to={l.to} className={linkCls} end={l.to === base}>{l.label}</NavLink>)}
+          {/* Links (Visible on all sizes) */}
+          <div className="flex items-center gap-3 md:gap-8 overflow-x-auto no-scrollbar mx-2 sm:mx-4 px-2">
+            {links.map(l => <NavLink key={l.to} to={l.to} className={linkCls} end={l.to === base} style={{ whiteSpace: 'nowrap' }}>{l.label}</NavLink>)}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 shrink-0">
             <ThemeSwitcher />
-            <button onClick={() => setOpen(!open)} className="md:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800">
-              {open ? <FiX size={20} /> : <FiMenu size={20} />}
-            </button>
           </div>
         </div>
-
-        {/* Mobile Menu */}
-        {open && (
-          <div className="md:hidden pb-4 border-t border-gray-100 dark:border-gray-800 mt-2 pt-4 flex flex-col gap-3">
-            {links.map(l => (
-              <NavLink key={l.to} to={l.to} className={linkCls} end={l.to === base} onClick={() => setOpen(false)}>
-                {l.label}
-              </NavLink>
-            ))}
-          </div>
-        )}
       </div>
     </nav>
   );
