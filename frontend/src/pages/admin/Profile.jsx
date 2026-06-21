@@ -1,7 +1,14 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { profileAPI, BASE_URL } from '../../services/api';
 import toast from 'react-hot-toast';
 import Spinner from '../../components/common/Spinner';
+
+const Field = React.memo(({ label, children }) => (
+  <div>
+    <label className="label">{label}</label>
+    {children}
+  </div>
+));
 
 const AdminProfile = () => {
   console.log("AdminProfile Render");
@@ -137,13 +144,6 @@ const AdminProfile = () => {
       </div>
     );
   }
-
-  const Field = ({ label, children }) => (
-    <div>
-      <label className="label">{label}</label>
-      {children}
-    </div>
-  );
 
   return (
     <div className="max-w-2xl">
