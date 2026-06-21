@@ -4,11 +4,11 @@ import { motion } from 'framer-motion';
 import {
   FiMail, FiPhone, FiMapPin, FiGithub, FiLinkedin, FiTwitter, FiInstagram,
   FiDownload, FiExternalLink, FiCalendar, FiSend, FiCheckCircle, FiAward,
-  FiCode, FiBriefcase, FiZap
+  FiCode, FiBriefcase, FiZap, FiFileText
 } from 'react-icons/fi';
 import {
   skillsAPI, achievementsAPI, activitiesAPI, projectsAPI, experienceAPI,
-  portfolioAPI, BASE_URL
+  portfolioAPI, certificatesAPI, BASE_URL
 } from '../services/api';
 import Section from '../components/common/Section';
 import Seo from '../components/common/Seo';
@@ -20,7 +20,7 @@ const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior:
 
 const Home = () => {
   const { profile, username } = useOutletContext();
-  const [data, setData] = useState({ skills: [], achievements: [], activities: [], projects: [], experience: [] });
+  const [data, setData] = useState({ skills: [], achievements: [], activities: [], projects: [], experience: [], certificates: [] });
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [sending, setSending] = useState(false);
@@ -32,15 +32,16 @@ const Home = () => {
       achievementsAPI.getPublic(username).catch(() => ({ data: [] })),
       activitiesAPI.getPublic(username).catch(() => ({ data: [] })),
       projectsAPI.getPublic(username).catch(() => ({ data: [] })),
-      experienceAPI.getPublic(username).catch(() => ({ data: [] }))
-    ]).then(([s, a, ac, p, e]) =>
-      setData({ skills: s.data, achievements: a.data, activities: ac.data, projects: p.data, experience: e.data })
+      experienceAPI.getPublic(username).catch(() => ({ data: [] })),
+      certificatesAPI.getPublic(username).catch(() => ({ data: [] }))
+    ]).then(([s, a, ac, p, e, c]) =>
+      setData({ skills: s.data, achievements: a.data, activities: ac.data, projects: p.data, experience: e.data, certificates: c.data })
     ).finally(() => setLoading(false));
   }, [username]);
 
   if (loading) return <PageLoader />;
 
-  const { skills, achievements, activities, projects, experience } = data;
+  const { skills, achievements, activities, projects, experience, certificates } = data;
   const social = profile?.social || {};
   const socialLinks = [
     { key: 'linkedin', icon: <FiLinkedin />, label: 'LinkedIn' },
@@ -276,6 +277,31 @@ const Home = () => {
               <div key={a._id} className="rounded-2xl p-5 bg-white/70 dark:bg-gray-800/60 backdrop-blur border border-white/40 dark:border-gray-700 animate-on-scroll">
                 <h4 className="font-semibold text-gray-900 dark:text-white">{a.name}</h4>
                 <p className="text-sm text-gray-500 dark:text-gray-400">{a.description}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {/* ───── CERTIFICATES ───── */}
+      {certificates.length > 0 && (
+        <Section title="Certificates" subtitle="Professional credentials">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {certificates.map((c) => (
+              <div key={c._id} className="flex flex-col rounded-2xl p-5 bg-white/70 dark:bg-gray-800/60 backdrop-blur border border-white/40 dark:border-gray-700 hover:shadow-lg transition-shadow animate-on-scroll">
+                <div className="mb-3">
+                  <FiFileText className="text-primary-500 mb-2" size={22} />
+                  <h4 className="font-semibold text-gray-900 dark:text-white">{c.name}</h4>
+                  <p className="text-sm text-gray-700 dark:text-gray-300">{c.issuer}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Issued {c.issueDate}</p>
+                </div>
+                {c.credentialUrl && (
+                  <div className="mt-auto pt-4 border-t border-gray-100 dark:border-gray-700">
+                    <a href={c.credentialUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm font-medium text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">
+                      Show credential <FiExternalLink size={14} />
+                    </a>
+                  </div>
+                )}
               </div>
             ))}
           </div>

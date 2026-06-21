@@ -126,6 +126,13 @@ export const activitiesAPI = {
   update: (id, d) => api.put(`/activities/${id}`, d),
   delete: (id) => api.delete(`/activities/${id}`)
 };
+export const certificatesAPI = {
+  getMine: () => api.get('/certificates/me'),
+  getPublic: (u) => api.get(`/certificates/public/${u}`),
+  create: (d) => api.post('/certificates', d),
+  update: (id, d) => api.put(`/certificates/${id}`, d),
+  delete: (id) => api.delete(`/certificates/${id}`)
+};
 export const portfolioAPI = {
   getMyLink: () => api.get('/portfolio/me/link'),
   qrCodeUrl: (u) => `${BASE_URL}/api/portfolio/${encodeURIComponent(u)}/qrcode`,

@@ -99,3 +99,20 @@ export const AdminActivities = () => {
     { name: 'description', label: 'Description', required: true, type: 'textarea', placeholder: 'What you did…' },
   ]} />;
 };
+
+// ------ CERTIFICATES ------
+import { certificatesAPI } from '../../services/api';
+export const AdminCertificates = () => {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const load = () => certificatesAPI.getMine().then(r => setItems(r.data)).catch(() => {}).finally(() => setLoading(false));
+  useEffect(() => { load(); }, []);
+  if (loading) return <PageLoader />;
+  return <AdminCRUD title="Certificates" itemLabel="Certificate" items={items} api={certificatesAPI} onRefresh={load} fields={[
+    { name: 'name', label: 'Certificate Name', required: true, placeholder: 'AWS Certified Solutions Architect' },
+    { name: 'issuer', label: 'Issuing Organization', required: true, placeholder: 'Amazon Web Services' },
+    { name: 'issueDate', label: 'Issue Date', required: true, placeholder: 'May 2024' },
+    { name: 'credentialUrl', label: 'Credential URL', placeholder: 'https://...' },
+  ]} />;
+};
+

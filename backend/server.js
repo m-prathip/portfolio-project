@@ -61,6 +61,7 @@ app.use('/api/projects', require('./routes/projects'));
 app.use('/api/skills', require('./routes/skills'));
 app.use('/api/achievements', require('./routes/achievements'));
 app.use('/api/activities', require('./routes/activities'));
+app.use('/api/certificates', require('./routes/certificates'));
 app.use('/api/portfolio', require('./routes/portfolio'));
 
 // Health check

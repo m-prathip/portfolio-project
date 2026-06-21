@@ -3,7 +3,7 @@ import { Link, useNavigate, Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import ThemeSwitcher from '../../components/common/ThemeSwitcher';
-import { FiHome, FiUser, FiBookOpen, FiBriefcase, FiCode, FiAward, FiActivity, FiLogOut, FiSun, FiMoon, FiMenu, FiX, FiGlobe, FiShare2, FiBarChart2 } from 'react-icons/fi';
+import { FiHome, FiUser, FiBookOpen, FiBriefcase, FiCode, FiAward, FiActivity, FiLogOut, FiSun, FiMoon, FiMenu, FiX, FiGlobe, FiShare2, FiBarChart2, FiFileText } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 const adminNav = [
@@ -16,6 +16,7 @@ const adminNav = [
   { to: '/admin/skills', icon: <FiActivity size={18} />, label: 'Skills' },
   { to: '/admin/achievements', icon: <FiAward size={18} />, label: 'Achievements' },
   { to: '/admin/activities', icon: <FiGlobe size={18} />, label: 'Activities' },
+  { to: '/admin/certificates', icon: <FiFileText size={18} />, label: 'Certificates' },
 ];
 
 const AdminLayout = () => {
