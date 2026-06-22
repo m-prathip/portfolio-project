@@ -130,8 +130,13 @@ const Home = () => {
                   </div>
                 )}
                 {topSkills.map((s, i) => {
-                  const angle = topSkills.length > 1 ? (i / (topSkills.length - 1)) * Math.PI : Math.PI / 2;
-                  const radius = window.innerWidth < 640 ? 100 : 180;
+                  const isRight = i % 2 === 0;
+                  const offsetIdx = Math.floor(i / 2);
+                  const sign = offsetIdx % 2 === 0 ? 1 : -1;
+                  const angleOffset = offsetIdx * (Math.PI / 7) * sign;
+                  const angle = isRight ? angleOffset : Math.PI - angleOffset;
+                  
+                  const radius = typeof window !== 'undefined' && window.innerWidth < 640 ? 125 : 200;
                   const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius;
                   return (
                     <motion.span key={s}
