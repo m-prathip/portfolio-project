@@ -30,10 +30,7 @@ export const ThemeProvider = ({ children }) => {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   });
 
-  const [theme, setThemeState] = useState(() => {
-    const saved = localStorage.getItem('themePalette');
-    return VALID.includes(saved) ? saved : DEFAULT_THEME;
-  });
+  const [theme, setThemeState] = useState(DEFAULT_THEME);
 
   // Briefly enable a global transition class so switches animate smoothly
   // without paying the transition cost on every interaction.
@@ -51,7 +48,6 @@ export const ThemeProvider = ({ children }) => {
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
-    localStorage.setItem('themePalette', theme);
   }, [theme]);
 
   const setTheme = useCallback((id) => {

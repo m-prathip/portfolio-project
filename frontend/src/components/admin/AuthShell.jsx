@@ -1,15 +1,18 @@
+import { useEffect } from 'react';
 import { useTheme } from '../../context/ThemeContext';
-import ThemeSwitcher from '../common/ThemeSwitcher';
 import { FiSun, FiMoon } from 'react-icons/fi';
 
 // Shared card/background for all auth screens (login, signup, verify,
 // forgot, reset) so the layout isn't duplicated five times.
 const AuthShell = ({ icon, title, subtitle, children, footer }) => {
-  const { dark, toggle } = useTheme();
+  const { dark, toggle, setTheme } = useTheme();
+
+  useEffect(() => {
+    setTheme('openai');
+  }, [setTheme]);
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-4">
       <div className="fixed top-4 right-4 flex items-center gap-2">
-        <ThemeSwitcher />
         <button onClick={toggle} aria-label="Toggle theme"
           className="p-2 rounded-lg bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-400 shadow">
           {dark ? <FiSun size={18} /> : <FiMoon size={18} />}

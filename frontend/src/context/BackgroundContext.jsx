@@ -18,12 +18,7 @@ export const BACKGROUNDS = [
 const VALID = BACKGROUNDS.map((b) => b.id);
 
 export const BackgroundProvider = ({ children }) => {
-  const [bg, setBgState] = useState(() => {
-    const saved = localStorage.getItem('bgScene');
-    return VALID.includes(saved) ? saved : 'particles';
-  });
-
-  useEffect(() => { localStorage.setItem('bgScene', bg); }, [bg]);
+  const [bg, setBgState] = useState('particles');
 
   const setBg = (id) => { if (VALID.includes(id)) setBgState(id); };
 

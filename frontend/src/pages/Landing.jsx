@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useTheme } from '../context/ThemeContext';
 import { FiLink, FiGrid, FiShare2, FiArrowRight, FiCheckCircle, FiMail, FiMessageSquare } from 'react-icons/fi';
 
 const features = [
@@ -9,6 +11,12 @@ const features = [
 ];
 
 const Landing = () => {
+  const { setTheme } = useTheme();
+
+  useEffect(() => {
+    setTheme('openai');
+  }, [setTheme]);
+
   return (
     <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
       {/* --- Header Section --- */}

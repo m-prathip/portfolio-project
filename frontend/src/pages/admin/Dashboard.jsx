@@ -3,6 +3,7 @@ import { Link, useNavigate, Outlet, NavLink } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import ThemeSwitcher from '../../components/common/ThemeSwitcher';
+import { profileAPI } from '../../services/api';
 import { FiHome, FiUser, FiBookOpen, FiBriefcase, FiCode, FiAward, FiActivity, FiLogOut, FiSun, FiMoon, FiMenu, FiX, FiGlobe, FiShare2, FiBarChart2, FiFileText } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
@@ -31,6 +32,26 @@ const AdminLayout = () => {
     logout();
     toast.success('Logged out');
     navigate('/admin/login');
+  };
+
+  const handleThemeChange = async (t) => {
+    try {
+      const fd = new FormData();
+      fd.append('theme', t);
+      await profileAPI.updateMine(fd);
+    } catch (err) {
+      console.error('Failed to save theme', err);
+    }
+  };
+
+  const handleBgChange = async (b) => {
+    try {
+      const fd = new FormData();
+      fd.append('background', b);
+      await profileAPI.updateMine(fd);
+    } catch (err) {
+      console.error('Failed to save background', err);
+    }
   };
 
   const linkCls = ({ isActive }) =>
@@ -90,7 +111,7 @@ const AdminLayout = () => {
           </button>
           <h1 className="font-semibold text-gray-900 dark:text-white hidden sm:block">Dashboard</h1>
           <div className="flex items-center gap-2 ml-auto">
-            <ThemeSwitcher />
+            <ThemeSwitcher onThemeSelect={handleThemeChange} onBgSelect={handleBgChange} />
             <button onClick={toggle} className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
               {dark ? <FiSun size={18} /> : <FiMoon size={18} />}
             </button>

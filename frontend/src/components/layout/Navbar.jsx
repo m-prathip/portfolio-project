@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import ThemeSwitcher from '../common/ThemeSwitcher';
 import { FiMenu, FiX } from 'react-icons/fi';
 
 // Rendered inside a specific user's /u/:username portfolio, so every link
@@ -44,7 +43,6 @@ const Navbar = ({ username, profile }) => {
           </div>
 
           <div className="flex items-center gap-2 shrink-0">
-            <ThemeSwitcher />
           </div>
         </div>
       </div>

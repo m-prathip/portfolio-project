@@ -7,6 +7,7 @@ import SceneBackground from '../components/three/SceneBackground';
 import AssistantWidget from '../components/common/AssistantWidget';
 import { profileAPI, portfolioAPI } from '../services/api';
 import { useTheme } from '../context/ThemeContext';
+import { useBackground } from '../context/BackgroundContext';
 import { FiArrowLeft } from 'react-icons/fi';
 
 const EmptyState = ({ title, text }) => (
@@ -19,7 +20,8 @@ const EmptyState = ({ title, text }) => (
 
 const PortfolioLayout = () => {
   const { username } = useParams();
-  const { theme } = useTheme();
+  const { theme, setTheme } = useTheme();
+  const { setBg } = useBackground();
   const [status, setStatus] = useState('loading'); // loading | not-found | not-setup | ready
   const [profile, setProfile] = useState(null);
 
@@ -30,6 +32,8 @@ const PortfolioLayout = () => {
       .then((res) => {
         if (cancelled) return;
         setProfile(res.data);
+        if (res.data.theme) setTheme(res.data.theme);
+        if (res.data.background) setBg(res.data.background);
         setStatus(res.data.isSetup ? 'ready' : 'not-setup');
       })
       .catch((err) => {

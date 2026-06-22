@@ -4,8 +4,8 @@ import { useBackground } from '../../context/BackgroundContext';
 import { FiDroplet, FiSun, FiMoon, FiCheck } from 'react-icons/fi';
 
 // Floating-panel theme switcher: light/dark segmented toggle + a grid of
-// live preview cards for all 10 palettes. Selection persists (ThemeContext).
-const ThemeSwitcher = ({ align = 'right' }) => {
+// live preview cards for all 10 palettes.
+const ThemeSwitcher = ({ align = 'right', onThemeSelect, onBgSelect }) => {
   const { mode, setMode, theme, setTheme, themes } = useTheme();
   const { bg, setBg, backgrounds } = useBackground();
   const [open, setOpen] = useState(false);
@@ -45,7 +45,10 @@ const ThemeSwitcher = ({ align = 'right' }) => {
             {themes.map((t) => {
               const active = t.id === theme;
               return (
-                <button key={t.id} onClick={() => setTheme(t.id)}
+                <button key={t.id} onClick={() => {
+                  setTheme(t.id);
+                  if (onThemeSelect) onThemeSelect(t.id);
+                }}
                   className={`group relative flex items-center gap-2 p-2 rounded-xl border transition-all
                     ${active ? 'border-primary-500 ring-2 ring-primary-500/30'
                              : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'}`}>
@@ -62,7 +65,10 @@ const ThemeSwitcher = ({ align = 'right' }) => {
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-wide mt-4 mb-2">Background</p>
           <div className="grid grid-cols-2 gap-1.5">
             {backgrounds.map((b) => (
-              <button key={b.id} onClick={() => setBg(b.id)}
+              <button key={b.id} onClick={() => {
+                setBg(b.id);
+                if (onBgSelect) onBgSelect(b.id);
+              }}
                 className={`text-xs px-2 py-1.5 rounded-lg border transition-colors text-left truncate
                   ${b.id === bg ? 'border-primary-500 text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/20'
                                 : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-gray-300'}`}>
