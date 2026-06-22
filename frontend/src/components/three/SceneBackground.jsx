@@ -1,18 +1,14 @@
 import { Suspense, lazy, useMemo } from 'react';
 import { useBackground } from '../../context/BackgroundContext';
-import { useTheme } from '../../context/ThemeContext';
+import { useTheme, THEMES } from '../../context/ThemeContext';
 
 const ThreeScene = lazy(() => import('./ThreeScene'));
 
-// Reads the active theme's primary colour (CSS var) → hex, so the 3D
-// scene recolours when the user switches themes.
-function themeColor() {
-  if (typeof window === 'undefined') return '#10a37f';
-  const v = getComputedStyle(document.documentElement).getPropertyValue('--c-primary-500').trim();
-  const parts = v.split(/\s+/).map(Number);
-  if (parts.length === 3 && parts.every((n) => !Number.isNaN(n)))
-    return '#' + parts.map((n) => n.toString(16).padStart(2, '0')).join('');
-  return '#10a37f';
+// Gets the active theme's primary colour directly from the THEMES definition,
+// avoiding CSS parsing races during fast switching.
+function themeColor(themeId) {
+  const t = THEMES.find((x) => x.id === themeId);
+  return t ? t.swatch[0] : '#10a37f';
 }
 
 // Heuristic: skip WebGL on weak devices / reduced-motion preference.
@@ -27,7 +23,7 @@ function isLowEnd() {
 const SceneBackground = () => {
   const { bg } = useBackground();
   const { theme, mode } = useTheme();
-  const color = useMemo(() => themeColor(), [theme, mode]);
+  const color = useMemo(() => themeColor(theme), [theme]);
   const showThree = bg !== 'off' && !isLowEnd();
 
   return (
