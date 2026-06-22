@@ -128,6 +128,7 @@ const Home = () => {
                   <div className="relative h-full w-full rounded-full bg-gradient-to-br from-primary-500 to-accent flex items-center justify-center text-white text-7xl font-bold ring-4 ring-white/60 dark:ring-gray-800 shadow-2xl">
                     {profile?.name?.[0] || '?'}
                   </div>
+                )}
               </div>
             </motion.div>
 
