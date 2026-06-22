@@ -14,7 +14,7 @@ const Section = ({ id, className = '', children, title, subtitle }) => {
   }, []);
 
   return (
-    <section id={id} ref={ref} className={`py-10 md:py-14 ${className}`}>
+    <section id={id} ref={ref} className={`py-6 md:py-10 ${className}`}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {(title || subtitle) && (
           <div className="mb-8 animate-on-scroll">

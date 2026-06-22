@@ -113,8 +113,8 @@ const Home = () => {
       />
 
       {/* ───── HERO ───── */}
-      <section className="relative min-h-screen flex items-center pt-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 w-full">
+      <section className="relative min-h-screen flex items-start sm:items-center pt-24 sm:pt-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-16 sm:py-16 w-full">
           <div className="flex flex-col items-center justify-center text-center gap-8 sm:gap-10 lg:gap-12">
             {/* Avatar + floating tech */}
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.15 }}
@@ -201,7 +201,7 @@ const Home = () => {
       </section>
 
       {/* ───── RECRUITER SNAPSHOT (stats) ───── */}
-      <Section className="!py-6">
+      <Section className="!py-4">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {stats.map((s) => (
             <div key={s.label} className="rounded-2xl p-5 text-center bg-white/70 dark:bg-gray-800/60 backdrop-blur border border-white/40 dark:border-gray-700 shadow-sm">
