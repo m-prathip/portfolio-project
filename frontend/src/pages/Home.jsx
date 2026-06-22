@@ -136,7 +136,13 @@ const Home = () => {
                   const angleOffset = offsetIdx * (Math.PI / 7) * sign;
                   const angle = isRight ? angleOffset : Math.PI - angleOffset;
                   
-                  const radius = typeof window !== 'undefined' && window.innerWidth < 640 ? 95 : 160;
+                  let radius = 220;
+                  if (typeof window !== 'undefined') {
+                    if (window.innerWidth < 640) radius = 140; // Mobile (w-40 = r80 + 60)
+                    else if (window.innerWidth < 1024) radius = 190; // sm (w-64 = r128 + 62)
+                    else radius = 240; // lg (w-80 = r160 + 80)
+                  }
+                  
                   const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius;
                   return (
                     <motion.span key={s}
