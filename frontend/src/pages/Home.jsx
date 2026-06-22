@@ -132,15 +132,15 @@ const Home = () => {
                 {topSkills.map((s, i) => {
                   const isRight = i % 2 === 0;
                   const offsetIdx = Math.floor(i / 2);
-                  const sign = offsetIdx % 2 === 0 ? 1 : -1;
-                  const angleOffset = offsetIdx * (Math.PI / 7) * sign;
+                  const sequence = [0, -1, 1, -2, 2, -3, 3];
+                  const multiplier = sequence[offsetIdx] || 0;
+                  const angleOffset = multiplier * (Math.PI / 8);
                   const angle = isRight ? angleOffset : Math.PI - angleOffset;
                   
-                  let radius = 220;
+                  let radius = 205; // lg: 160 + 45
                   if (typeof window !== 'undefined') {
-                    if (window.innerWidth < 640) radius = 140; // Mobile (w-40 = r80 + 60)
-                    else if (window.innerWidth < 1024) radius = 190; // sm (w-64 = r128 + 62)
-                    else radius = 240; // lg (w-80 = r160 + 80)
+                    if (window.innerWidth < 640) radius = 125; // mobile: 80 + 45
+                    else if (window.innerWidth < 1024) radius = 175; // sm: 128 + 47
                   }
                   
                   const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius;
