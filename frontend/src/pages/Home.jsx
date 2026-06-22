@@ -128,32 +128,6 @@ const Home = () => {
                   <div className="relative h-full w-full rounded-full bg-gradient-to-br from-primary-500 to-accent flex items-center justify-center text-white text-7xl font-bold ring-4 ring-white/60 dark:ring-gray-800 shadow-2xl">
                     {profile?.name?.[0] || '?'}
                   </div>
-                )}
-                {topSkills.map((s, i) => {
-                  const isRight = i % 2 === 0;
-                  const offsetIdx = Math.floor(i / 2);
-                  const sequence = [0, -1, 1, -2, 2, -3, 3];
-                  const multiplier = sequence[offsetIdx] || 0;
-                  const angleOffset = multiplier * (Math.PI / 8);
-                  const angle = isRight ? angleOffset : Math.PI - angleOffset;
-                  
-                  let radius = 205; // lg: 160 + 45
-                  if (typeof window !== 'undefined') {
-                    if (window.innerWidth < 640) radius = 125; // mobile: 80 + 45
-                    else if (window.innerWidth < 1024) radius = 175; // sm: 128 + 47
-                  }
-                  
-                  const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius;
-                  return (
-                    <motion.span key={s}
-                      animate={{ y: [y, y - 10, y] }} transition={{ duration: 3 + i, repeat: Infinity, ease: 'easeInOut' }}
-                      style={{ left: `calc(50% + ${x}px)`, top: `calc(50% + ${y}px)` }}
-                      className="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-xs font-medium px-3 py-1 rounded-full
-                        bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-white/50 dark:border-gray-700 text-gray-700 dark:text-gray-200 shadow-lg z-10">
-                      {s}
-                    </motion.span>
-                  );
-                })}
               </div>
             </motion.div>
 
