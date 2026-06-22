@@ -109,13 +109,13 @@ const Landing = () => {
                     <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
                       <FiMail size={18} />
                     </div>
-                    <span className="font-medium">portfoliopublisher@gmail.com</span>
+                    <a href="mailto:portfoliopublisher@gmail.com" className="font-medium hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">portfoliopublisher@gmail.com</a>
                   </div>
                   <div className="flex items-center gap-4 text-gray-700 dark:text-gray-300">
                     <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center text-indigo-600 dark:text-indigo-400">
                       <FiMessageSquare size={18} />
                     </div>
-                    <span className="font-medium">Live Chat Support (Coming Soon)</span>
+                    <span className="font-medium flex items-center gap-2">Live Chat Support <span className="text-xs bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300 px-2 py-0.5 rounded-full font-semibold uppercase tracking-wider">Premium</span></span>
                   </div>
                 </div>
               </div>
@@ -138,8 +138,8 @@ const Landing = () => {
         <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-500 dark:text-gray-400">
           <p>© {new Date().getFullYear()} PORTFOLIO publisher. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <Link to="/terms" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Terms</Link>
-            <Link to="/privacy" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Privacy</Link>
+            <a href="#" className="flex items-center gap-1.5 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Terms <span className="text-[10px] bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400 px-1.5 py-0.5 rounded uppercase font-bold">Premium</span></a>
+            <a href="#" className="flex items-center gap-1.5 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Privacy <span className="text-[10px] bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-400 px-1.5 py-0.5 rounded uppercase font-bold">Premium</span></a>
             <a href="mailto:portfoliopublisher@gmail.com" className="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Contact</a>
           </div>
         </div>
