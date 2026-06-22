@@ -28,7 +28,6 @@ const ResetPassword = lazy(() => import('./pages/admin/ResetPassword'));
 const AdminLayout = lazy(() => import('./pages/admin/Dashboard'));
 const AdminProfile = lazy(() => import('./pages/admin/Profile'));
 const AdminShare = lazy(() => import('./pages/admin/Share'));
-const Analytics = lazy(() => import('./pages/admin/Analytics'));
 
 // Sections.jsx exports several named admin components — lazy-load each.
 const pick = (name) => lazy(() => import('./pages/admin/Sections').then((m) => ({ default: m[name] })));
@@ -64,7 +63,6 @@ const App = () => (
                 <Route index element={<Navigate to="/admin/profile" replace />} />
                 <Route path="dashboard" element={<Navigate to="/admin/profile" replace />} />
                 <Route path="profile" element={<AdminProfile />} />
-                <Route path="analytics" element={<Analytics />} />
                 <Route path="share" element={<AdminShare />} />
                 <Route path="education" element={<AdminEducation />} />
                 <Route path="experience" element={<AdminExperience />} />

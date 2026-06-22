@@ -137,18 +137,10 @@ export const portfolioAPI = {
   getMyLink: () => api.get('/portfolio/me/link'),
   qrCodeUrl: (u) => `${BASE_URL}/api/portfolio/${encodeURIComponent(u)}/qrcode`,
   // public tracking (best-effort, never blocks the UI)
-  trackVisit: (u, path) => api.post(`/portfolio/${encodeURIComponent(u)}/visit`, { path, referrer: document.referrer }).catch(() => {}),
-  trackTheme: (u, theme) => api.post(`/portfolio/${encodeURIComponent(u)}/theme`, { theme }).catch(() => {}),
-  trackResume: (u) => api.post(`/portfolio/${encodeURIComponent(u)}/resume-download`).catch(() => {}),
   contact: (u, d) => api.post(`/portfolio/${encodeURIComponent(u)}/contact`, d),
   ask: (u, d) => api.post(`/portfolio/${encodeURIComponent(u)}/assistant`, d)
 };
 
-// Owner analytics dashboard (Phase 16)
-export const analyticsAPI = {
-  get: () => api.get('/portfolio/me/analytics'),
-  messages: () => api.get('/portfolio/me/messages'),
-  markRead: (id) => api.patch(`/portfolio/me/messages/${id}/read`)
-};
+
 
 export default api;

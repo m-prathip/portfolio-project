@@ -82,7 +82,6 @@ const Home = () => {
   ].filter(Boolean);
 
   const resumeUrl = asset(profile?.resumeUrl);
-  const downloadResume = () => { portfolioAPI.trackResume(username); };
 
   const sendContact = async (e) => {
     e.preventDefault();
@@ -157,7 +156,7 @@ const Home = () => {
 
               <div className="flex flex-wrap justify-center gap-3 pt-2">
                 {resumeUrl && (
-                  <a href={resumeUrl} target="_blank" rel="noopener noreferrer" onClick={downloadResume} className="btn-primary">
+                  <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">
                     <FiDownload size={16} /> Resume
                   </a>
                 )}

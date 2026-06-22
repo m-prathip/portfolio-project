@@ -4,12 +4,11 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import ThemeSwitcher from '../../components/common/ThemeSwitcher';
 import { profileAPI } from '../../services/api';
-import { FiHome, FiUser, FiBookOpen, FiBriefcase, FiCode, FiAward, FiActivity, FiLogOut, FiSun, FiMoon, FiMenu, FiX, FiGlobe, FiShare2, FiBarChart2, FiFileText } from 'react-icons/fi';
+import { FiHome, FiUser, FiBookOpen, FiBriefcase, FiCode, FiAward, FiActivity, FiLogOut, FiSun, FiMoon, FiMenu, FiX, FiGlobe, FiShare2, FiFileText } from 'react-icons/fi';
 import toast from 'react-hot-toast';
 
 const adminNav = [
   { to: '/admin/profile', icon: <FiUser size={18} />, label: 'Profile' },
-  { to: '/admin/analytics', icon: <FiBarChart2 size={18} />, label: 'Analytics' },
   { to: '/admin/share', icon: <FiShare2 size={18} />, label: 'Share' },
   { to: '/admin/education', icon: <FiBookOpen size={18} />, label: 'Education' },
   { to: '/admin/experience', icon: <FiBriefcase size={18} />, label: 'Experience' },

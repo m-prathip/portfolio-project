@@ -43,15 +43,7 @@ const PortfolioLayout = () => {
     return () => { cancelled = true; };
   }, [username]);
 
-  // Record a visit once the portfolio resolves (best effort).
-  useEffect(() => {
-    if (status === 'ready') portfolioAPI.trackVisit(username, window.location.pathname);
-  }, [status, username]);
 
-  // Theme analytics: log which theme a visitor uses.
-  useEffect(() => {
-    if (status === 'ready' && theme) portfolioAPI.trackTheme(username, theme);
-  }, [status, theme, username]);
 
   useEffect(() => {
     document.title = profile?.name ? `${profile.name} — Portfolio` : 'Portfolio';
