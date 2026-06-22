@@ -111,13 +111,15 @@ function Spheres({ color }) {
     group.current.rotation.y = s.clock.elapsedTime * 0.05;
   });
   return (
-    <group ref={group}>
-      {items.map((it, i) => (
-        <mesh key={i} position={it.p}>
-          <sphereGeometry args={[it.s, 24, 24]} />
-          <meshStandardMaterial color={color} transparent opacity={0.55} roughness={0.3} metalness={0.4} />
-        </mesh>
-      ))}
+    <group>
+      <group ref={group}>
+        {items.map((it, i) => (
+          <mesh key={i} position={it.p}>
+            <sphereGeometry args={[it.s, 24, 24]} />
+            <meshStandardMaterial color={color} transparent opacity={0.55} roughness={0.3} metalness={0.4} />
+          </mesh>
+        ))}
+      </group>
       <ambientLight intensity={0.6} />
       <pointLight position={[5, 5, 5]} intensity={30} color={color} />
     </group>
@@ -146,7 +148,76 @@ function Waves({ color }) {
   );
 }
 
-const SCENES = { particles: Particles, neural: Neural, galaxy: Galaxy, grid: Grid, spheres: Spheres, waves: Waves };
+// ── Polygons: Premium floating low-poly geometry ──
+function Polygons({ color }) {
+  const items = useMemo(
+    () => Array.from({ length: 8 }, () => ({
+      p: [(Math.random() - 0.5) * 12, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 6],
+      s: 0.8 + Math.random() * 1.5,
+      rx: Math.random() * Math.PI, ry: Math.random() * Math.PI,
+      rs: (Math.random() - 0.5) * 0.4
+    })), []);
+  const group = useRef();
+  useFrame((s) => {
+    if (!group.current) return;
+    group.current.children.forEach((m, i) => {
+      m.rotation.x += items[i].rs * 0.02;
+      m.rotation.y += items[i].rs * 0.03;
+      m.position.y = items[i].p[1] + Math.sin(s.clock.elapsedTime * 0.5 + i) * 0.4;
+    });
+    group.current.rotation.y = s.clock.elapsedTime * 0.02;
+  });
+  return (
+    <group>
+      <group ref={group}>
+        {items.map((it, i) => (
+          <mesh key={i} position={it.p} rotation={[it.rx, it.ry, 0]}>
+            <icosahedronGeometry args={[it.s, 0]} />
+            <meshStandardMaterial color={color} transparent opacity={0.4} flatShading roughness={0.1} metalness={0.6} />
+          </mesh>
+        ))}
+      </group>
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[10, 10, 5]} intensity={1.5} color={color} />
+      <directionalLight position={[-10, -10, -5]} intensity={0.5} color="#ffffff" />
+    </group>
+  );
+}
+
+// ── Cubes: Premium wireframe tumbling cubes ──
+function Cubes({ color }) {
+  const count = 40;
+  const group = useRef();
+  const items = useMemo(() => Array.from({ length: count }, () => ({
+    p: [(Math.random() - 0.5) * 15, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 10],
+    s: 0.3 + Math.random() * 0.6,
+    r: [Math.random() * Math.PI, Math.random() * Math.PI, 0],
+    rs: [(Math.random() - 0.5) * 0.02, (Math.random() - 0.5) * 0.02, 0]
+  })), [count]);
+  
+  useFrame((s) => {
+    if (!group.current) return;
+    group.current.children.forEach((m, i) => {
+      m.rotation.x += items[i].rs[0];
+      m.rotation.y += items[i].rs[1];
+    });
+    group.current.rotation.y = s.clock.elapsedTime * 0.03;
+    group.current.rotation.x = Math.sin(s.clock.elapsedTime * 0.1) * 0.2;
+  });
+  
+  return (
+    <group ref={group}>
+      {items.map((it, i) => (
+        <mesh key={i} position={it.p} rotation={it.r}>
+          <boxGeometry args={[it.s, it.s, it.s]} />
+          <meshBasicMaterial color={color} wireframe transparent opacity={0.4} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+const SCENES = { particles: Particles, neural: Neural, galaxy: Galaxy, grid: Grid, spheres: Spheres, waves: Waves, polygons: Polygons, cubes: Cubes };
 
 export default function ThreeScene({ variant = 'particles', color = '#10a37f' }) {
   const Scene = SCENES[variant] || Particles;

@@ -162,6 +162,48 @@
   --c-accent: 167 139 250;
 }
 
+[data-theme="crimson"] {
+  --c-primary-50: 255 241 242;
+  --c-primary-100: 255 228 230;
+  --c-primary-200: 254 205 211;
+  --c-primary-300: 253 164 175;
+  --c-primary-400: 251 113 133;
+  --c-primary-500: 244 63 94;
+  --c-primary-600: 225 29 72;
+  --c-primary-700: 190 18 60;
+  --c-primary-800: 159 18 57;
+  --c-primary-900: 136 19 55;
+  --c-accent: 225 29 72;
+}
+
+[data-theme="sunrise"] {
+  --c-primary-50: 255 247 237;
+  --c-primary-100: 255 237 213;
+  --c-primary-200: 254 215 170;
+  --c-primary-300: 253 186 116;
+  --c-primary-400: 251 146 60;
+  --c-primary-500: 249 115 22;
+  --c-primary-600: 234 88 12;
+  --c-primary-700: 194 65 12;
+  --c-primary-800: 154 52 18;
+  --c-primary-900: 124 45 18;
+  --c-accent: 234 88 12;
+}
+
+[data-theme="monochrome"] {
+  --c-primary-50: 250 250 250;
+  --c-primary-100: 244 244 245;
+  --c-primary-200: 228 228 231;
+  --c-primary-300: 212 212 216;
+  --c-primary-400: 161 161 170;
+  --c-primary-500: 113 113 122;
+  --c-primary-600: 82 82 91;
+  --c-primary-700: 63 63 70;
+  --c-primary-800: 39 39 42;
+  --c-primary-900: 24 24 27;
+  --c-accent: 82 82 91;
+}
+
 /* Smooth animated transition when switching theme / mode */
 html.theme-anim, html.theme-anim *, html.theme-anim *::before, html.theme-anim *::after {
   transition: background-color .4s ease, border-color .4s ease, color .3s ease, fill .3s ease, stroke .3s ease !important;

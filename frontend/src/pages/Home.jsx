@@ -115,31 +115,61 @@ const Home = () => {
       {/* ───── HERO ───── */}
       <section className="relative min-h-screen flex items-center pt-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-16 w-full">
-          <div className="grid grid-cols-2 gap-4 sm:gap-10 lg:gap-16 items-start md:items-center">
+          <div className="flex flex-col items-center justify-center text-center gap-8 sm:gap-10 lg:gap-12">
+            {/* Avatar + floating tech */}
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.15 }}
+              className="relative mx-auto mt-4 md:mt-0">
+              <div className="relative h-40 w-40 sm:h-64 sm:w-64 lg:h-80 lg:w-80">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary-500 to-accent blur-2xl opacity-30 animate-pulse" />
+                {profile?.profileImage ? (
+                  <img src={asset(profile.profileImage)} alt={profile?.name} loading="lazy"
+                    className="relative h-full w-full object-cover rounded-full ring-4 ring-white/60 dark:ring-gray-800 shadow-2xl" />
+                ) : (
+                  <div className="relative h-full w-full rounded-full bg-gradient-to-br from-primary-500 to-accent flex items-center justify-center text-white text-7xl font-bold ring-4 ring-white/60 dark:ring-gray-800 shadow-2xl">
+                    {profile?.name?.[0] || '?'}
+                  </div>
+                )}
+                {topSkills.map((s, i) => {
+                  const angle = topSkills.length > 1 ? (i / (topSkills.length - 1)) * Math.PI : Math.PI / 2;
+                  const radius = window.innerWidth < 640 ? 100 : 180;
+                  const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius;
+                  return (
+                    <motion.span key={s}
+                      animate={{ y: [y, y - 10, y] }} transition={{ duration: 3 + i, repeat: Infinity, ease: 'easeInOut' }}
+                      style={{ left: `calc(50% + ${x}px)`, top: `calc(50% + ${y}px)` }}
+                      className="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-xs font-medium px-3 py-1 rounded-full
+                        bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-white/50 dark:border-gray-700 text-gray-700 dark:text-gray-200 shadow-lg z-10">
+                      {s}
+                    </motion.span>
+                  );
+                })}
+              </div>
+            </motion.div>
+
             <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-              className="space-y-6">
+              className="space-y-6 flex flex-col items-center">
               <span className="inline-flex items-center gap-2 bg-white/70 dark:bg-gray-800/60 backdrop-blur
                 border border-white/40 dark:border-gray-700 text-primary-700 dark:text-primary-300 px-4 py-1.5 rounded-full text-sm font-medium shadow-sm">
                 <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" /> Available for opportunities
               </span>
 
-              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight break-words">
+              <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight break-words text-center">
                 Hi, I'm <span className="bg-gradient-to-r from-primary-600 to-accent bg-clip-text text-transparent">
                   {profile?.name}
                 </span>
               </h1>
 
-              <p className="text-lg sm:text-2xl text-gray-600 dark:text-gray-300 font-semibold h-8">
+              <p className="text-lg sm:text-2xl text-gray-600 dark:text-gray-300 font-semibold h-8 text-center">
                 {typed}<span className="text-primary-500 animate-pulse">|</span>
               </p>
 
-              {profile?.about && <p className="text-gray-500 dark:text-gray-400 max-w-lg leading-relaxed">{profile.about.slice(0, 180)}{profile.about.length > 180 ? '…' : ''}</p>}
+              {profile?.about && <p className="text-gray-500 dark:text-gray-400 max-w-2xl leading-relaxed text-center mx-auto">{profile.about}</p>}
 
               {profile?.location && (
-                <p className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"><FiMapPin size={15} /> {profile.location}</p>
+                <p className="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400"><FiMapPin size={15} /> {profile.location}</p>
               )}
 
-              <div className="flex flex-wrap gap-3 pt-2">
+              <div className="flex flex-wrap justify-center gap-3 pt-2">
                 {resumeUrl && (
                   <a href={resumeUrl} target="_blank" rel="noopener noreferrer" onClick={downloadResume} className="btn-primary">
                     <FiDownload size={16} /> Resume
@@ -156,7 +186,7 @@ const Home = () => {
               </div>
 
               {socialLinks.length > 0 && (
-                <div className="flex gap-3 pt-2">
+                <div className="flex justify-center gap-3 pt-2">
                   {socialLinks.map((l) => (
                     <a key={l.key} href={social[l.key]} target="_blank" rel="noopener noreferrer" aria-label={l.label}
                       className="h-10 w-10 flex items-center justify-center rounded-xl bg-white/70 dark:bg-gray-800/60 backdrop-blur border border-white/40 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:text-primary-600 hover:scale-110 transition-all">
@@ -166,42 +196,12 @@ const Home = () => {
                 </div>
               )}
             </motion.div>
-
-            {/* Avatar + floating tech */}
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.15 }}
-              className="relative mx-auto mt-8 md:mt-0">
-              <div className="relative h-32 w-32 sm:h-64 sm:w-64 lg:h-80 lg:w-80">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary-500 to-accent blur-2xl opacity-30 animate-pulse" />
-                {profile?.profileImage ? (
-                  <img src={asset(profile.profileImage)} alt={profile?.name} loading="lazy"
-                    className="relative h-full w-full object-cover rounded-full ring-4 ring-white/60 dark:ring-gray-800 shadow-2xl" />
-                ) : (
-                  <div className="relative h-full w-full rounded-full bg-gradient-to-br from-primary-500 to-accent flex items-center justify-center text-white text-7xl font-bold ring-4 ring-white/60 dark:ring-gray-800 shadow-2xl">
-                    {profile?.name?.[0] || '?'}
-                  </div>
-                )}
-                {topSkills.map((s, i) => {
-                  const angle = (i / topSkills.length) * Math.PI * 2;
-                  const radius = window.innerWidth < 640 ? 75 : 150;
-                  const x = Math.cos(angle) * radius, y = Math.sin(angle) * radius;
-                  return (
-                    <motion.span key={s}
-                      animate={{ y: [y, y - 10, y] }} transition={{ duration: 3 + i, repeat: Infinity, ease: 'easeInOut' }}
-                      style={{ left: `calc(50% + ${x}px)`, top: `calc(50% + ${y}px)` }}
-                      className="absolute -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-xs font-medium px-3 py-1 rounded-full
-                        bg-white/80 dark:bg-gray-800/80 backdrop-blur border border-white/50 dark:border-gray-700 text-gray-700 dark:text-gray-200 shadow-lg">
-                      {s}
-                    </motion.span>
-                  );
-                })}
-              </div>
-            </motion.div>
           </div>
         </div>
       </section>
 
       {/* ───── RECRUITER SNAPSHOT (stats) ───── */}
-      <Section className="!py-12">
+      <Section className="!py-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {stats.map((s) => (
             <div key={s.label} className="rounded-2xl p-5 text-center bg-white/70 dark:bg-gray-800/60 backdrop-blur border border-white/40 dark:border-gray-700 shadow-sm">

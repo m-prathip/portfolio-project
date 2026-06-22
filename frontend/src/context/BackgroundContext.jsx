@@ -5,13 +5,15 @@ const BackgroundContext = createContext();
 // Selectable 3D/animated backgrounds (Phase 9). 'off' uses a pure-CSS
 // gradient (also the automatic fallback on low-end devices).
 export const BACKGROUNDS = [
-  { id: 'off',       name: 'None' },
-  { id: 'particles', name: 'Interactive Particles' },
+  { id: 'particles', name: 'Drifting Particles' },
   { id: 'neural',    name: 'AI Neural Network' },
-  { id: 'galaxy',    name: 'Galaxy Universe' },
-  { id: 'grid',      name: 'Cyber Grid' },
+  { id: 'galaxy',    name: 'Cosmic Galaxy' },
+  { id: 'grid',      name: 'Cyberpunk Grid' },
   { id: 'spheres',   name: 'Floating Spheres' },
-  { id: 'waves',     name: 'Abstract Waves' }
+  { id: 'waves',     name: 'Abstract Waves' },
+  { id: 'polygons',  name: 'Premium Polygons' },
+  { id: 'cubes',     name: 'Wireframe Cubes' },
+  { id: 'off',       name: 'Clean (Off)' }
 ];
 const VALID = BACKGROUNDS.map((b) => b.id);
 

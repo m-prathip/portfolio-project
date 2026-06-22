@@ -5,16 +5,19 @@ const ThemeContext = createContext();
 // The 10 selectable palettes. `swatch` is used to render the preview cards
 // (a small gradient that approximates the theme's primary + accent colours).
 export const THEMES = [
-  { id: 'openai',    name: 'OpenAI',       swatch: ['#10a37f', '#0d9488'] },
-  { id: 'apple',     name: 'Apple',        swatch: ['#0071e3', '#3b82f6'] },
-  { id: 'cyberpunk', name: 'Cyberpunk',    swatch: ['#ec4899', '#22d3ee'] },
-  { id: 'royal',     name: 'Royal Purple', swatch: ['#7c3aed', '#a855f7'] },
-  { id: 'ocean',     name: 'Ocean Blue',   swatch: ['#0ea5e9', '#06b6d4'] },
-  { id: 'emerald',   name: 'Emerald',      swatch: ['#10b981', '#22c55e'] },
-  { id: 'blackgold', name: 'Black Gold',   swatch: ['#d4af37', '#92400e'] },
-  { id: 'midnight',  name: 'Midnight',     swatch: ['#6366f1', '#312e81'] },
-  { id: 'neon',      name: 'Neon Future',  swatch: ['#84cc16', '#39ff14'] },
-  { id: 'glass',     name: 'Glass',        swatch: ['#818cf8', '#a78bfa'] }
+  { id: 'openai',     name: 'OpenAI',       swatch: ['#10a37f', '#0d9488'] },
+  { id: 'apple',      name: 'Apple',        swatch: ['#0071e3', '#3b82f6'] },
+  { id: 'cyberpunk',  name: 'Cyberpunk',    swatch: ['#ec4899', '#22d3ee'] },
+  { id: 'royal',      name: 'Royal Purple', swatch: ['#7c3aed', '#a855f7'] },
+  { id: 'ocean',      name: 'Ocean Blue',   swatch: ['#0ea5e9', '#06b6d4'] },
+  { id: 'emerald',    name: 'Emerald',      swatch: ['#10b981', '#22c55e'] },
+  { id: 'blackgold',  name: 'Black Gold',   swatch: ['#d4af37', '#92400e'] },
+  { id: 'midnight',   name: 'Midnight',     swatch: ['#6366f1', '#312e81'] },
+  { id: 'neon',       name: 'Neon Future',  swatch: ['#84cc16', '#39ff14'] },
+  { id: 'glass',      name: 'Glass',        swatch: ['#818cf8', '#a78bfa'] },
+  { id: 'crimson',    name: 'Crimson',      swatch: ['#e11d48', '#be123c'] },
+  { id: 'sunrise',    name: 'Sunrise',      swatch: ['#f97316', '#ea580c'] },
+  { id: 'monochrome', name: 'Monochrome',   swatch: ['#52525b', '#3f3f46'] }
 ];
 
 const VALID = THEMES.map((t) => t.id);

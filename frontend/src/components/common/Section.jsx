@@ -14,10 +14,10 @@ const Section = ({ id, className = '', children, title, subtitle }) => {
   }, []);
 
   return (
-    <section id={id} ref={ref} className={`py-16 md:py-20 ${className}`}>
+    <section id={id} ref={ref} className={`py-10 md:py-14 ${className}`}>
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         {(title || subtitle) && (
-          <div className="mb-12 animate-on-scroll">
+          <div className="mb-8 animate-on-scroll">
             {title && <h2 className="section-title">{title}</h2>}
             {subtitle && <p className="section-subtitle">{subtitle}</p>}
             <div className="h-1 w-16 bg-primary-600 rounded-full mt-3" />
