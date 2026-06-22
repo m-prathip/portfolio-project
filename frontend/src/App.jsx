@@ -11,6 +11,8 @@ import { PageLoader } from './components/common/Spinner';
 // small and the heavy 3D/animation libs only load on the portfolio pages
 // that use them (Phase 13 — performance).
 const Landing = lazy(() => import('./pages/Landing'));
+const Terms = lazy(() => import('./pages/Terms'));
+const Privacy = lazy(() => import('./pages/Privacy'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const PortfolioLayout = lazy(() => import('./pages/PortfolioLayout'));
 const Home = lazy(() => import('./pages/Home'));
@@ -47,6 +49,8 @@ const App = () => (
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<Landing />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<Privacy />} />
 
               {/* Auth */}
               <Route path="/admin/login" element={<AdminLogin />} />
