@@ -26,7 +26,7 @@ const ThemeSwitcher = ({ align = 'right' }) => {
 
       {open && (
         <div className={`absolute z-50 mt-2 w-72 ${align === 'right' ? 'right-0' : 'left-0'}
-          bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 p-4 animate-fade-in`}>
+          bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-100 dark:border-gray-700 p-4 animate-fade-in max-h-[80vh] overflow-y-auto`}>
           {/* Mode toggle */}
           <div className="flex items-center gap-1 p-1 mb-4 rounded-xl bg-gray-100 dark:bg-gray-900">
             {[['light', FiSun, 'Light'], ['dark', FiMoon, 'Dark']].map(([m, Icon, label]) => (
