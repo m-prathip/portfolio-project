@@ -59,25 +59,44 @@ function offlineReply(message, ctx) {
   return `I can tell you about ${p.name || 'the developer'}'s skills, projects, experience, education, achievements, or contact details. What would you like to know?`;
 }
 
-async function callOpenAI(message, history, ctxText, name) {
-  const key = process.env.OPENAI_API_KEY;
-  const system = `You are a friendly, concise portfolio assistant for ${name || 'a software developer'}. ` +
+async function callGemini(message, history, ctxText, name) {
+  const key = process.env.GEMINI_API_KEY;
+  const systemInstruction = `You are a friendly, concise portfolio assistant for ${name || 'a software developer'}. ` +
     `Answer recruiter questions using ONLY the facts below. If something isn't covered, say you don't have that info and suggest contacting them. ` +
     `Keep answers under 90 words.\n\n--- PORTFOLIO FACTS ---\n${ctxText}`;
-  const messages = [{ role: 'system', content: system }];
-  (history || []).slice(-6).forEach((m) => {
-    if (m.role && m.content) messages.push({ role: m.role === 'user' ? 'user' : 'assistant', content: String(m.content).slice(0, 1000) });
-  });
-  messages.push({ role: 'user', content: String(message).slice(0, 1000) });
 
-  const resp = await fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
-    body: JSON.stringify({ model: process.env.OPENAI_MODEL || 'gpt-4o-mini', messages, temperature: 0.4, max_tokens: 220 })
+  const contents = [];
+  (history || []).slice(-6).forEach((m) => {
+    if (m.role && m.content) {
+      contents.push({
+        role: m.role === 'user' ? 'user' : 'model',
+        parts: [{ text: String(m.content).slice(0, 1000) }]
+      });
+    }
   });
-  if (!resp.ok) throw new Error(`OpenAI ${resp.status}`);
+  
+  contents.push({
+    role: 'user',
+    parts: [{ text: String(message).slice(0, 1000) }]
+  });
+
+  const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system_instruction: { parts: [{ text: systemInstruction }] },
+      contents,
+      generationConfig: { temperature: 0.4, maxOutputTokens: 220 }
+    })
+  });
+
+  if (!resp.ok) {
+    const err = await resp.text();
+    throw new Error(`Gemini ${resp.status}: ${err}`);
+  }
+  
   const data = await resp.json();
-  return data.choices?.[0]?.message?.content?.trim();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
 }
 
 // @route POST /api/portfolio/:username/assistant
@@ -90,11 +109,12 @@ const ask = async (req, res) => {
     const name = ctx.profile?.name;
     let reply, mode = 'offline';
 
-    if (process.env.OPENAI_API_KEY) {
+    if (process.env.GEMINI_API_KEY) {
       try {
-        reply = await callOpenAI(message, req.body.history, contextToText(ctx), name);
+        reply = await callGemini(message, req.body.history, contextToText(ctx), name);
         mode = 'ai';
       } catch (e) {
+        console.error('Gemini error:', e.message);
         reply = offlineReply(message, ctx); // graceful fallback
       }
     } else {
