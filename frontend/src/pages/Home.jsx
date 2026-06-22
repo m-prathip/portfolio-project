@@ -113,8 +113,8 @@ const Home = () => {
       />
 
       {/* ───── HERO ───── */}
-      <section className="relative min-h-screen flex items-start sm:items-center pt-24 sm:pt-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-16 sm:py-16 w-full">
+      <section className="relative min-h-0 sm:min-h-screen flex items-start sm:items-center pt-24 sm:pt-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pb-8 sm:py-16 w-full">
           <div className="flex flex-col items-center justify-center text-center gap-8 sm:gap-10 lg:gap-12">
             {/* Avatar + floating tech */}
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.15 }}
