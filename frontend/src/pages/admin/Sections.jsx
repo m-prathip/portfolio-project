@@ -40,16 +40,45 @@ export const AdminExperience = () => {
 
 // ------ SKILLS ------
 import { skillsAPI } from '../../services/api';
+const SKILL_CATEGORIES = {
+  frontend: ['react', 'react.js', 'vue', 'angular', 'html', 'css', 'javascript', 'typescript', 'next.js', 'tailwind'],
+  backend: ['node.js', 'node', 'express', 'python', 'django', 'java', 'spring', 'c#', '.net', 'php', 'ruby', 'go'],
+  database: ['mongodb', 'sql', 'mysql', 'postgresql', 'redis', 'firebase', 'oracle'],
+  devops: ['docker', 'kubernetes', 'aws', 'azure', 'gcp', 'linux', 'ci/cd', 'jenkins', 'terraform'],
+  tools: ['git', 'github', 'gitlab', 'figma', 'postman', 'jira']
+};
+
 export const AdminSkills = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const load = () => skillsAPI.getMine().then(r => setItems(r.data)).catch(() => {}).finally(() => setLoading(false));
   useEffect(() => { load(); }, []);
   if (loading) return <PageLoader />;
+  
   return <AdminCRUD title="Skills" itemLabel="Skill" items={items} api={skillsAPI} onRefresh={load} fields={[
-    { name: 'name', label: 'Skill Name', required: true, placeholder: 'React.js' },
+    { 
+      name: 'name', 
+      label: 'Skill Name', 
+      required: true, 
+      placeholder: 'React.js',
+      onChangeEffect: (val, form) => {
+        if (form.category) return form; // Don't overwrite if user already typed something
+        const search = val.toLowerCase().trim();
+        for (const [cat, skills] of Object.entries(SKILL_CATEGORIES)) {
+          if (skills.includes(search)) {
+            return { ...form, category: cat.charAt(0).toUpperCase() + cat.slice(1) };
+          }
+        }
+        return form;
+      }
+    },
     { name: 'level', label: 'Proficiency Level (0-100)', required: true, type: 'range', defaultValue: 80 },
-    { name: 'category', label: 'Category', placeholder: 'Frontend, Backend, DevOps…' },
+    { 
+      name: 'category', 
+      label: 'Category', 
+      placeholder: 'Frontend, Backend, DevOps…',
+      datalist: ['Frontend', 'Backend', 'Database', 'DevOps', 'Tools', 'Design', 'Mobile', 'Other']
+    },
   ]} />;
 };
 

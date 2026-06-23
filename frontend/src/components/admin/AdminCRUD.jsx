@@ -127,9 +127,26 @@ const AdminCRUD = ({ title, items = [], fields = [], api, onRefresh, itemLabel =
                       onChange={e => setForm({...form,[field.name]:e.target.files[0]})}
                       className="input py-2 text-sm" />
                   ) : (
-                    <input type={field.type || 'text'} value={form[field.name] || ''}
-                      onChange={e => setForm({...form,[field.name]:e.target.value})}
-                      className="input" placeholder={field.placeholder} />
+                    <>
+                      <input type={field.type || 'text'} value={form[field.name] || ''}
+                        onChange={e => {
+                          const val = e.target.value;
+                          setForm(prev => {
+                            let next = { ...prev, [field.name]: val };
+                            if (field.onChangeEffect) {
+                              next = field.onChangeEffect(val, next);
+                            }
+                            return next;
+                          });
+                        }}
+                        list={field.datalist ? `${field.name}-list` : undefined}
+                        className="input" placeholder={field.placeholder} />
+                      {field.datalist && (
+                        <datalist id={`${field.name}-list`}>
+                          {field.datalist.map(opt => <option key={opt} value={opt} />)}
+                        </datalist>
+                      )}
+                    </>
                   )}
                   {field.help && <p className="text-xs text-gray-500 mt-1">{field.help}</p>}
                 </div>

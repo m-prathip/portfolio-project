@@ -58,7 +58,11 @@ const Home = () => {
   ].filter((l) => social[l.key]);
 
   const grouped = skills.reduce((acc, s) => {
-    const cat = s.category || 'General';
+    let rawCat = (s.category || 'General').trim();
+    const lowerCat = rawCat.toLowerCase();
+    const existingKey = Object.keys(acc).find(k => k.toLowerCase() === lowerCat);
+    const cat = existingKey || rawCat;
+    
     (acc[cat] = acc[cat] || []).push(s);
     return acc;
   }, {});
