@@ -45,8 +45,7 @@ const SKILL_CATEGORIES = {
   'Backend': ['node.js', 'node', 'express', 'python', 'django', 'java', 'spring', 'c#', '.net', 'php', 'ruby', 'go'],
   'Database': ['mongodb', 'sql', 'mysql', 'postgresql', 'redis', 'firebase', 'oracle'],
   'DevOps': ['docker', 'kubernetes', 'aws', 'azure', 'gcp', 'linux', 'ci/cd', 'jenkins', 'terraform'],
-  'Tools': ['git', 'github', 'gitlab', 'figma', 'postman', 'jira'],
-  'Artificial Intelligence and Data Science': ['python', 'machine learning', 'deep learning', 'tensorflow', 'pytorch', 'nlp', 'keras', 'scikit-learn', 'pandas', 'numpy', 'opencv', 'generative ai', 'llm', 'data science', 'data analysis', 'r', 'hadoop', 'spark', 'tableau', 'power bi', 'excel']
+  'Tools': ['git', 'github', 'gitlab', 'figma', 'postman', 'jira']
 };
 
 export const AdminSkills = () => {
@@ -78,7 +77,7 @@ export const AdminSkills = () => {
       name: 'category', 
       label: 'Category', 
       placeholder: 'Frontend, Backend, DevOps…',
-      datalist: ['Frontend', 'Backend', 'Database', 'DevOps', 'Tools', 'Design', 'Mobile', 'Artificial Intelligence and Data Science', 'Other']
+      datalist: ['Frontend', 'Backend', 'Database', 'DevOps', 'Tools', 'Design', 'Mobile', 'Other']
     },
   ]} />;
 };
