@@ -19,7 +19,7 @@ const Navbar = ({ username, profile }) => {
     { to: base, label: 'Home' },
     { to: `${base}/education`, label: 'Education' },
     { to: `${base}/projects`, label: 'Projects' },
-    { to: `${base}/certificates`, label: 'Certificates' },
+    { to: `${base}/experience`, label: 'Experience' },
   ];
 
   const navCls = `fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm shadow-sm' : 'bg-transparent'

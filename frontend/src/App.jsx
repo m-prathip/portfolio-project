@@ -19,6 +19,7 @@ const Home = lazy(() => import('./pages/Home'));
 const Education = lazy(() => import('./pages/Education'));
 const Projects = lazy(() => import('./pages/Projects'));
 const Certificates = lazy(() => import('./pages/Certificates'));
+const Experience = lazy(() => import('./pages/Experience'));
 
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
 const AdminSignup = lazy(() => import('./pages/admin/Signup'));
@@ -79,6 +80,7 @@ const App = () => (
                 <Route path="education" element={<Education />} />
                 <Route path="projects" element={<Projects />} />
                 <Route path="certificates" element={<Certificates />} />
+                <Route path="experience" element={<Experience />} />
                 <Route path="*" element={<Navigate to="." replace />} />
               </Route>
 

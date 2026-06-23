@@ -68,28 +68,37 @@ async function callGemini(message, history, ctxText, name) {
   const contents = [];
   (history || []).slice(-6).forEach((m) => {
     if (m.role && m.content) {
-      contents.push({
-        role: m.role === 'user' ? 'user' : 'model',
-        parts: [{ text: String(m.content).slice(0, 1000) }]
-      });
+      const role = m.role === 'user' ? 'user' : 'model';
+      if (contents.length > 0 && contents[contents.length - 1].role === role) {
+        contents[contents.length - 1].parts[0].text += '\n' + String(m.content).slice(0, 1000);
+      } else {
+        contents.push({
+          role,
+          parts: [{ text: String(m.content).slice(0, 1000) }]
+        });
+      }
     }
   });
   
-  contents.push({
-    role: 'user',
-    parts: [{ text: String(message).slice(0, 1000) }]
-  });
+  if (contents.length > 0 && contents[contents.length - 1].role === 'user') {
+    contents[contents.length - 1].parts[0].text += '\n' + String(message).slice(0, 1000);
+  } else {
+    contents.push({
+      role: 'user',
+      parts: [{ text: String(message).slice(0, 1000) }]
+    });
+  }
 
   // Gemini API requires the conversation to start with a 'user' role
   while (contents.length > 0 && contents[0].role === 'model') {
     contents.shift();
   }
 
-  const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`, {
+  const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${key}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      system_instruction: { parts: [{ text: systemInstruction }] },
+      systemInstruction: { parts: [{ text: systemInstruction }] },
       contents,
       generationConfig: { temperature: 0.4, maxOutputTokens: 220 }
     })

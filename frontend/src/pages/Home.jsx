@@ -293,14 +293,21 @@ const Home = () => {
         </Section>
       )}
 
-      {/* ───── ACTIVITIES ───── */}
-      {activities.length > 0 && (
-        <Section title="Activities" subtitle="Beyond the code" className="bg-gray-50/60 dark:bg-gray-900/40">
+      {/* ───── PROJECTS ───── */}
+      {projects.length > 0 && (
+        <Section title="Projects" subtitle="Things I've designed, built and shipped" className="bg-gray-50/60 dark:bg-gray-900/40">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {activities.map((a) => (
-              <div key={a._id} className="rounded-2xl p-5 bg-white/70 dark:bg-gray-800/60 backdrop-blur border border-white/40 dark:border-gray-700 animate-on-scroll">
-                <h4 className="font-semibold text-gray-900 dark:text-white">{a.name}</h4>
-                <p className="text-sm text-gray-500 dark:text-gray-400">{a.description}</p>
+            {projects.slice(0, 6).map((p) => (
+              <div key={p._id} className="flex flex-col rounded-2xl p-5 bg-white/70 dark:bg-gray-800/60 backdrop-blur border border-white/40 dark:border-gray-700 hover:shadow-lg transition-shadow animate-on-scroll">
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-1">{p.title}</h4>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 flex-1">{p.description}</p>
+                {p.techStack && p.techStack.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-auto">
+                    {p.techStack.slice(0, 4).map((t) => (
+                      <span key={t} className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">{t}</span>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
           </div>
