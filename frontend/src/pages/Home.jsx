@@ -298,14 +298,30 @@ const Home = () => {
         <Section title="Projects" subtitle="Things I've designed, built and shipped" className="bg-gray-50/60 dark:bg-gray-900/40">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {projects.slice(0, 6).map((p) => (
-              <div key={p._id} className="flex flex-col rounded-2xl p-5 bg-white/70 dark:bg-gray-800/60 backdrop-blur border border-white/40 dark:border-gray-700 hover:shadow-lg transition-shadow animate-on-scroll">
+              <div key={p._id} className="flex flex-col rounded-xl p-4 bg-white/70 dark:bg-gray-800/60 backdrop-blur border border-white/40 dark:border-gray-700 hover:shadow-lg transition-shadow animate-on-scroll">
                 <h4 className="font-semibold text-gray-900 dark:text-white mb-1">{p.title}</h4>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 flex-1">{p.description}</p>
                 {p.techStack && p.techStack.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mt-auto">
+                  <div className="flex flex-wrap gap-1.5 mt-auto mb-1">
                     {p.techStack.slice(0, 4).map((t) => (
                       <span key={t} className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">{t}</span>
                     ))}
+                  </div>
+                )}
+                {(p.githubLink || p.liveLink) && (
+                  <div className="flex items-center gap-4 mt-3 pt-3 border-t border-gray-100 dark:border-gray-700">
+                    {p.githubLink && (
+                      <a href={p.githubLink} target="_blank" rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">
+                        <FiGithub size={14} /> Code
+                      </a>
+                    )}
+                    {p.liveLink && (
+                      <a href={p.liveLink} target="_blank" rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 text-xs font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 ml-auto">
+                        <FiExternalLink size={14} /> Live Demo
+                      </a>
+                    )}
                   </div>
                 )}
               </div>

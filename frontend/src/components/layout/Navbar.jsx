@@ -18,7 +18,6 @@ const Navbar = ({ username, profile }) => {
   const links = [
     { to: base, label: 'Home' },
     { to: `${base}/education`, label: 'Education' },
-    { to: `${base}/projects`, label: 'Projects' },
     { to: `${base}/experience`, label: 'Experience' },
     { to: `${base}/activities`, label: 'Activities' },
   ];
