@@ -40,7 +40,7 @@ function offlineReply(message, ctx) {
   const p = ctx.profile || {};
   const has = (...words) => words.some((w) => q.includes(w));
 
-  if (has('hello', 'hi ', 'hey', 'who are you'))
+  if (has('hello', 'hey', 'who are you') || q.match(/\bhi\b/))
     return `Hi! I'm ${p.name || 'the developer'}'s portfolio assistant. Ask me about their skills, projects, experience, or how to get in touch.`;
   if (has('contact', 'email', 'reach', 'hire'))
     return p.email ? `You can reach ${p.name || 'them'} at ${p.email}.${p.phone ? ` Phone: ${p.phone}.` : ''}` : `Use the contact form on this page to get in touch.`;
@@ -80,7 +80,12 @@ async function callGemini(message, history, ctxText, name) {
     parts: [{ text: String(message).slice(0, 1000) }]
   });
 
-  const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${key}`, {
+  // Gemini API requires the conversation to start with a 'user' role
+  while (contents.length > 0 && contents[0].role === 'model') {
+    contents.shift();
+  }
+
+  const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${key}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({

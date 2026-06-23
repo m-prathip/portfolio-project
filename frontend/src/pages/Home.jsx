@@ -222,24 +222,52 @@ const Home = () => {
       {/* ───── SKILLS ───── */}
       {skills.length > 0 && (
         <Section title="Skills" subtitle="Technologies I work with" className="bg-gray-50/60 dark:bg-gray-900/40">
-          <div className="grid md:grid-cols-2 gap-8">
-            {Object.entries(grouped).map(([cat, list]) => (
-              <div key={cat} className="animate-on-scroll">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-4">{cat}</h3>
-                <div className="space-y-3">
-                  {list.map((s) => (
-                    <div key={s._id}>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-700 dark:text-gray-300">{s.name}</span>
-                        <span className="text-gray-400">{s.level}%</span>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Object.entries(grouped).map(([cat, list], catIdx) => (
+              <motion.div 
+                key={cat} 
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: catIdx * 0.1 }}
+                className="relative overflow-hidden rounded-3xl p-6 md:p-8 bg-white/70 dark:bg-gray-800/60 backdrop-blur-xl border border-white/50 dark:border-gray-700 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group"
+              >
+                {/* Decorative background glow */}
+                <div className="absolute -right-12 -top-12 w-40 h-40 bg-gradient-to-br from-primary-500/20 to-accent/20 rounded-full blur-3xl group-hover:scale-125 transition-transform duration-500" />
+                
+                <h3 className="text-xl font-extrabold text-gray-900 dark:text-white mb-6 flex items-center gap-3 capitalize tracking-tight relative z-10">
+                  <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">
+                    <FiZap size={16} className="group-hover:animate-bounce" />
+                  </div>
+                  {cat}
+                </h3>
+                
+                <div className="space-y-5 relative z-10">
+                  {list.map((s, idx) => (
+                    <div key={s._id} className="relative group/skill cursor-default">
+                      <div className="flex justify-between items-end mb-2">
+                        <span className="text-sm font-bold text-gray-700 dark:text-gray-200 group-hover/skill:text-primary-600 dark:group-hover/skill:text-primary-400 transition-colors">
+                          {s.name}
+                        </span>
+                        <span className="text-[11px] font-black tracking-wider text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800/80 px-2 py-0.5 rounded-full border border-gray-200 dark:border-gray-700">
+                          {s.level}%
+                        </span>
                       </div>
-                      <div className="h-2 rounded-full bg-gray-200 dark:bg-gray-700 overflow-hidden">
-                        <div className="h-full rounded-full bg-gradient-to-r from-primary-500 to-accent" style={{ width: `${s.level}%` }} />
+                      <div className="h-2.5 rounded-full bg-gray-100 dark:bg-gray-800/50 overflow-hidden relative shadow-inner">
+                        <motion.div 
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${s.level}%` }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1, delay: 0.2 + (idx * 0.1), ease: "easeOut" }}
+                          className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-primary-500 to-accent relative overflow-hidden" 
+                        >
+                          <div className="absolute inset-0 bg-white/20 w-1/2 -skew-x-12 -translate-x-full group-hover/skill:-translate-x-0 transition-transform duration-1000 ease-in-out" />
+                        </motion.div>
                       </div>
                     </div>
                   ))}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </Section>
