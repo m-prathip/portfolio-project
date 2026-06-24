@@ -24,8 +24,16 @@ const updateMyProfile = async (req, res) => {
     const data = { ...req.body };
     delete data.user; // ownership always comes from the authenticated session
 
-    if (req.files?.profileImage) data.profileImage = '/uploads/' + req.files.profileImage[0].filename;
-    if (req.files?.resume) data.resumeUrl = '/uploads/' + req.files.resume[0].filename;
+    if (req.files?.profileImage) {
+      data.profileImage = req.files.profileImage[0].path.startsWith('http')
+        ? req.files.profileImage[0].path
+        : '/uploads/' + req.files.profileImage[0].filename;
+    }
+    if (req.files?.resume) {
+      data.resumeUrl = req.files.resume[0].path.startsWith('http')
+        ? req.files.resume[0].path
+        : '/uploads/' + req.files.resume[0].filename;
+    }
 
     let profile = await Profile.findOne({ user: req.user.id });
     if (profile) {

@@ -19,7 +19,11 @@ const createCRUD = (Model) => ({
   create: async (req, res) => {
     try {
       const data = { ...req.body, user: req.user.id };
-      if (req.file) data.image = '/uploads/' + req.file.filename;
+      if (req.file) {
+        data.image = req.file.path.startsWith('http')
+          ? req.file.path
+          : '/uploads/' + req.file.filename;
+      }
       const item = await Model.create(data);
       res.status(201).json(item);
     } catch (err) { res.status(400).json({ message: err.message }); }
@@ -28,7 +32,11 @@ const createCRUD = (Model) => ({
     try {
       const data = { ...req.body };
       delete data.user; // ownership can't be changed through this endpoint
-      if (req.file) data.image = '/uploads/' + req.file.filename;
+      if (req.file) {
+        data.image = req.file.path.startsWith('http')
+          ? req.file.path
+          : '/uploads/' + req.file.filename;
+      }
       // Scoped to the owner so nobody can edit another user's item, even
       // if they guess or reuse a valid-looking id.
       const item = await Model.findOneAndUpdate({ _id: req.params.id, user: req.user.id }, data, { new: true, runValidators: true });
