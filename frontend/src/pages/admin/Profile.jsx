@@ -154,7 +154,7 @@ const AdminProfile = () => {
       {current?.profileImage && (
         <div className="mb-6 flex items-center gap-4">
           <img
-            src={`${BASE_URL}${current.profileImage}`}
+            src={current.profileImage.startsWith('/uploads') ? `${BASE_URL}${current.profileImage}` : current.profileImage}
             alt="Profile"
             className="w-20 h-20 rounded-xl object-cover border-2 border-gray-200 dark:border-gray-700"
           />
