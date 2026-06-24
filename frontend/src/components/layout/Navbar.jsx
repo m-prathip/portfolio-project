@@ -19,6 +19,8 @@ const Navbar = ({ username, profile }) => {
     { to: base, label: 'Home' },
     { to: `${base}/education`, label: 'Education' },
     { to: `${base}/experience`, label: 'Experience' },
+    { to: `${base}/projects`, label: 'Projects' },
+    { to: `${base}/certificates`, label: 'Certificates' },
     { to: `${base}/activities`, label: 'Activities' },
   ];
 

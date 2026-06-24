@@ -60,7 +60,7 @@ api.interceptors.response.use(
   }
 );
 
-const mp = { headers: { 'Content-Type': 'multipart/form-data' } };
+const mp = {}; // Let Axios handle FormData boundary automatically
 
 // ── Auth ────────────────────────────────────────────────
 export const authAPI = {
