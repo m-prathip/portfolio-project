@@ -10,13 +10,17 @@ if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
 
 let storage;
 
-if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY) {
+if (process.env.CLOUDINARY_URL || (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY)) {
   // Use Cloudinary if keys are provided
-  cloudinary.config({
-    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-    api_key: process.env.CLOUDINARY_API_KEY,
-    api_secret: process.env.CLOUDINARY_API_SECRET
-  });
+  if (!process.env.CLOUDINARY_URL) {
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      api_key: process.env.CLOUDINARY_API_KEY,
+      api_secret: process.env.CLOUDINARY_API_SECRET
+    });
+  }
+  
+  console.log("Cloudinary storage configured successfully.");
 
   storage = new CloudinaryStorage({
     cloudinary: cloudinary,
@@ -29,6 +33,7 @@ if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY) {
     },
   });
 } else {
+  console.log("Cloudinary keys not found. Falling back to local disk storage.");
   // Fall back to local disk storage if no keys exist
   storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, uploadDir),
