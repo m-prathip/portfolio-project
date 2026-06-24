@@ -176,12 +176,12 @@ const login = async (req, res) => {
       .select('+password +refreshTokens');
 
     if (!user || !(await user.matchPassword(password))) {
-      await LoginActivity.create({ ...logBase, email: clean, event: 'login_failed', reason: 'invalid_credentials' });
+      LoginActivity.create({ ...logBase, email: clean, event: 'login_failed', reason: 'invalid_credentials' }).catch(() => {});
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     if (!user.isVerified) {
-      await LoginActivity.create({ ...logBase, user: user._id, email: user.email, event: 'login_failed', reason: 'unverified' });
+      LoginActivity.create({ ...logBase, user: user._id, email: user.email, event: 'login_failed', reason: 'unverified' }).catch(() => {});
       await createAndSendOtp({ user, email: user.email, purpose: 'verify' }).catch(() => { });
       return res.status(403).json({ message: 'Please verify your email first. We sent you a new code.', email: user.email, requiresVerification: true });
     }
@@ -189,13 +189,13 @@ const login = async (req, res) => {
     // New-device detection: have we seen a successful login from this device before?
     const seen = await LoginActivity.findOne({ user: user._id, event: 'login_success', device });
     if (!seen) {
-      await LoginActivity.create({ ...logBase, user: user._id, email: user.email, event: 'new_device' });
+      LoginActivity.create({ ...logBase, user: user._id, email: user.email, event: 'new_device' }).catch(() => {});
       sendMail({ to: user.email, ...emails.loginAlert(device, ip, new Date().toUTCString()) }).catch(() => { });
     }
 
     user.lastLoginAt = new Date();
     const accessToken = await issueSession(user, req, res, { remember: !!remember });
-    await LoginActivity.create({ ...logBase, user: user._id, email: user.email, event: 'login_success' });
+    LoginActivity.create({ ...logBase, user: user._id, email: user.email, event: 'login_success' }).catch(() => {});
 
     res.json({ token: accessToken, user: publicUser(user) });
   } catch (error) {
@@ -248,7 +248,7 @@ const logout = async (req, res) => {
       if (user) {
         user.refreshTokens = user.refreshTokens.filter((t) => t.tokenHash !== hash);
         await user.save();
-        await LoginActivity.create({ user: user._id, email: user.email, event: 'logout', ip: getClientIp(req) });
+        LoginActivity.create({ user: user._id, email: user.email, event: 'logout', ip: getClientIp(req) }).catch(() => {});
       }
     }
     res.clearCookie(tokenUtil.REFRESH_COOKIE, tokenUtil.clearCookieOptions());
@@ -265,7 +265,7 @@ const forgotPassword = async (req, res) => {
     const user = await User.findOne({ email });
     if (user) {
       await createAndSendOtp({ user, email, purpose: 'reset' });
-      await LoginActivity.create({ user: user._id, email, event: 'password_reset', reason: 'requested', ip: getClientIp(req) });
+      LoginActivity.create({ user: user._id, email, event: 'password_reset', reason: 'requested', ip: getClientIp(req) }).catch(() => {});
     }
     res.json({ message: 'If that email is registered, a reset code has been sent.' });
   } catch (error) {
@@ -321,7 +321,7 @@ const resetPassword = async (req, res) => {
     await user.save();
 
     const accessToken = await issueSession(user, req, res); // fresh session (auto-login)
-    await LoginActivity.create({ user: user._id, email: user.email, event: 'password_reset', reason: 'completed', ip: getClientIp(req) });
+    LoginActivity.create({ user: user._id, email: user.email, event: 'password_reset', reason: 'completed', ip: getClientIp(req) }).catch(() => {});
     sendMail({ to: user.email, ...emails.passwordChanged() }).catch(() => { });
 
     res.json({ message: 'Password updated', token: accessToken, user: publicUser(user) });

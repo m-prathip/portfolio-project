@@ -13,6 +13,8 @@ export const BACKGROUNDS = [
   { id: 'waves',     name: 'Abstract Waves' },
   { id: 'polygons',  name: 'Premium Polygons' },
   { id: 'cubes',     name: 'Wireframe Cubes' },
+  { id: 'aurora',    name: 'Aurora Lights' },
+  { id: 'prism',     name: 'Crystal Prism' },
   { id: 'off',       name: 'Clean (Off)' }
 ];
 const VALID = BACKGROUNDS.map((b) => b.id);

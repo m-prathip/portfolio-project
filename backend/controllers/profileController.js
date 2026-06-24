@@ -53,22 +53,22 @@ const updateMyProfile = async (req, res) => {
 const getPublicProfile = async (req, res) => {
   try {
     const userId = req.portfolioUser._id;
-    const profile = await Profile.findOne({ user: userId });
+    const profile = await Profile.findOne({ user: userId }).lean();
     if (!profile) return res.json({ username: req.portfolioUser.username, isSetup: false });
     
     // Fetch all related sections in parallel to avoid frontend waterfalls
     const [skills, projects, experience, education, achievements, certificates, activities] = await Promise.all([
-      Skill.find({ user: userId }).sort('order'),
-      Project.find({ user: userId }).sort('order'),
-      Experience.find({ user: userId }).sort('-startDate'),
-      Education.find({ user: userId }).sort('-startDate'),
-      Achievement.find({ user: userId }).sort('-date'),
-      Certificate.find({ user: userId }).sort('order'),
-      Activity.find({ user: userId }).sort('-date')
+      Skill.find({ user: userId }).sort('order').lean(),
+      Project.find({ user: userId }).sort('order').lean(),
+      Experience.find({ user: userId }).sort('-startDate').lean(),
+      Education.find({ user: userId }).sort('-startDate').lean(),
+      Achievement.find({ user: userId }).sort('-date').lean(),
+      Certificate.find({ user: userId }).sort('order').lean(),
+      Activity.find({ user: userId }).sort('-date').lean()
     ]);
 
     res.json({ 
-      ...profile.toObject(), 
+      ...profile, 
       username: req.portfolioUser.username, 
       isSetup: true,
       collections: {

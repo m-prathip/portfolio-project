@@ -217,7 +217,77 @@ function Cubes({ color }) {
   );
 }
 
-const SCENES = { particles: Particles, neural: Neural, galaxy: Galaxy, grid: Grid, spheres: Spheres, waves: Waves, polygons: Polygons, cubes: Cubes };
+// ── Aurora: Flowing colourful light ribbons ──
+function Aurora({ color }) {
+  const geo = useRef();
+  const seg = 128;
+  useFrame((s) => {
+    const g = geo.current; if (!g) return;
+    const t = s.clock.elapsedTime * 0.5;
+    const pos = g.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+      const x = pos.getX(i), y = pos.getY(i);
+      const z = Math.sin(x * 0.8 + t) * Math.cos(y * 0.4 + t) * 1.5;
+      pos.setZ(i, z);
+    }
+    g.computeVertexNormals();
+    pos.needsUpdate = true;
+  });
+  return (
+    <mesh rotation={[-Math.PI / 2.5, 0, 0]} position={[0, -2, -3]}>
+      <planeGeometry ref={geo} args={[25, 15, seg, 64]} />
+      <meshStandardMaterial color={color} emissive={color} emissiveIntensity={0.6} wireframe transparent opacity={0.15} side={THREE.DoubleSide} />
+    </mesh>
+  );
+}
+
+// ── Prism: Rotating crystalline structure ──
+function Prism({ color }) {
+  const group = useRef();
+  const items = useMemo(
+    () => Array.from({ length: 12 }, () => ({
+      p: [(Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 8],
+      s: 0.5 + Math.random() * 1.5,
+      r: [Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI],
+      rs: [(Math.random() - 0.5) * 0.05, (Math.random() - 0.5) * 0.05, (Math.random() - 0.5) * 0.05]
+    })), []);
+    
+  useFrame((s) => {
+    if (!group.current) return;
+    group.current.children.forEach((m, i) => {
+      m.rotation.x += items[i].rs[0];
+      m.rotation.y += items[i].rs[1];
+      m.rotation.z += items[i].rs[2];
+    });
+    group.current.rotation.y = Math.sin(s.clock.elapsedTime * 0.2) * 0.5;
+    group.current.rotation.x = Math.cos(s.clock.elapsedTime * 0.15) * 0.3;
+  });
+  return (
+    <group>
+      <group ref={group}>
+        {items.map((it, i) => (
+          <mesh key={i} position={it.p} rotation={it.r}>
+            <octahedronGeometry args={[it.s, 0]} />
+            <meshPhysicalMaterial 
+              color={color} 
+              transparent 
+              opacity={0.6} 
+              roughness={0.1} 
+              metalness={0.8} 
+              transmission={0.9} 
+              ior={1.5} 
+            />
+          </mesh>
+        ))}
+      </group>
+      <ambientLight intensity={1} />
+      <pointLight position={[10, 10, 10]} intensity={50} color="#ffffff" />
+      <pointLight position={[-10, -10, -10]} intensity={30} color={color} />
+    </group>
+  );
+}
+
+const SCENES = { particles: Particles, neural: Neural, galaxy: Galaxy, grid: Grid, spheres: Spheres, waves: Waves, polygons: Polygons, cubes: Cubes, aurora: Aurora, prism: Prism };
 
 export default function ThreeScene({ variant = 'particles', color = '#10a37f' }) {
   const Scene = SCENES[variant] || Particles;
