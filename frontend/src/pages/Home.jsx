@@ -249,34 +249,34 @@ const Home = () => {
       {/* ───── SKILLS ───── */}
       {skills.length > 0 && (
         <Section title="Skills" subtitle="Technologies I work with" className="bg-gray-50/60 dark:bg-gray-900/40">
-          <div className="max-w-2xl mx-auto flex flex-col gap-4 relative z-10">
+          <div className="max-w-4xl mx-auto grid sm:grid-cols-2 gap-4 relative z-10">
             {skills
               .slice()
               .sort((a, b) => b.level - a.level)
               .slice(0, 5)
               .map((s, idx) => {
-                const radius = 22;
-                const strokeWidth = 3;
+                const radius = 15;
+                const strokeWidth = 2.5;
                 const circumference = 2 * Math.PI * radius;
                 return (
                   <motion.div
                     key={s._id}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: idx * 0.08 }}
-                    className="flex items-center gap-5 p-4 rounded-2xl bg-white/70 dark:bg-gray-800/60 backdrop-blur-xl border border-white/50 dark:border-gray-700/80 shadow-sm hover:shadow-md hover:translate-x-1.5 transition-all duration-300 group/item"
+                    transition={{ duration: 0.4, delay: idx * 0.05 }}
+                    className="flex items-center gap-4 p-2.5 rounded-xl bg-white/70 dark:bg-gray-800/60 backdrop-blur-xl border border-white/50 dark:border-gray-700/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group/item"
                   >
                     {/* Glowing HUD Circle progress on the left */}
-                    <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
-                      <div className="absolute inset-[5px] rounded-full bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm border border-white/40 dark:border-gray-850/60 shadow-inner group-hover/item:scale-105 transition-all duration-300 flex items-center justify-center text-gray-500 dark:text-gray-400 group-hover/item:text-primary-600 dark:group-hover/item:text-primary-400">
+                    <div className="relative w-12 h-12 flex items-center justify-center shrink-0">
+                      <div className="absolute inset-[4px] rounded-full bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm border border-white/40 dark:border-gray-850/60 shadow-inner group-hover/item:scale-105 transition-all duration-300 flex items-center justify-center text-gray-500 dark:text-gray-400 group-hover/item:text-primary-600 dark:group-hover/item:text-primary-400">
                         {getSkillIcon(s.name)}
                       </div>
                       
-                      <svg className="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 60 60">
+                      <svg className="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 40 40">
                         <defs>
                           <filter id={`glow-${s._id}`} x="-20%" y="-20%" width="140%" height="140%">
-                            <feGaussianBlur stdDeviation="1.5" result="blur" />
+                            <feGaussianBlur stdDeviation="1" result="blur" />
                             <feComposite in="SourceGraphic" in2="blur" operator="over" />
                           </filter>
                           <linearGradient id={`grad-${s._id}`} x1="0%" y1="0%" x2="100%" y2="100%">
@@ -285,21 +285,10 @@ const Home = () => {
                           </linearGradient>
                         </defs>
                         
-                        {/* Outer rotating dottedHUD ring */}
-                        <circle
-                          cx="30"
-                          cy="30"
-                          r={radius + 4}
-                          className="stroke-primary-500/20 dark:stroke-primary-400/20 fill-none animate-[spin_30s_linear_infinite]"
-                          strokeWidth="0.75"
-                          strokeDasharray="3 4"
-                          style={{ transformOrigin: '30px 30px' }}
-                        />
-
                         {/* Track Circle */}
                         <circle
-                          cx="30"
-                          cy="30"
+                          cx="20"
+                          cy="20"
                           r={radius}
                           className="stroke-gray-100 dark:stroke-gray-850/30 fill-none"
                           strokeWidth={strokeWidth}
@@ -307,8 +296,8 @@ const Home = () => {
                         
                         {/* Progress Circle */}
                         <motion.circle
-                          cx="30"
-                          cy="30"
+                          cx="20"
+                          cy="20"
                           r={radius}
                           stroke={`url(#grad-${s._id})`}
                           className="fill-none"
@@ -326,16 +315,16 @@ const Home = () => {
 
                     {/* Metadata detail block */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex justify-between items-center mb-1">
-                        <h4 className="text-base font-extrabold text-gray-850 dark:text-white capitalize truncate group-hover/item:text-primary-600 dark:group-hover/item:text-primary-400 transition-colors">
+                      <div className="flex justify-between items-center mb-0.5">
+                        <h4 className="text-sm font-bold text-gray-800 dark:text-white capitalize truncate group-hover/item:text-primary-600 dark:group-hover/item:text-primary-400 transition-colors">
                           {s.name}
                         </h4>
-                        <span className="text-xs font-mono font-bold text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/40 px-2.5 py-0.5 rounded border border-primary-100 dark:border-primary-900/50">
+                        <span className="text-[10px] font-mono font-bold text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/40 px-2 py-0.5 rounded border border-primary-100 dark:border-primary-900/50">
                           {s.level}%
                         </span>
                       </div>
-                      <p className="text-xs text-gray-400 dark:text-gray-500">
-                        {s.level >= 85 ? 'Expert level command' : s.level >= 70 ? 'Advanced proficiency' : 'Proficient developer'}
+                      <p className="text-[11px] text-gray-400 dark:text-gray-500">
+                        {s.level >= 85 ? 'Expert proficiency' : s.level >= 70 ? 'Advanced command' : 'Proficient level'}
                       </p>
                     </div>
                   </motion.div>
