@@ -79,6 +79,16 @@ const Home = () => {
 
   const { skills = [], achievements = [], activities = [], projects = [], experience = [], certificates = [] } = data || {};
 
+  const grouped = skills.reduce((acc, s) => {
+    let rawCat = (s.category || 'General').trim();
+    const lowerCat = rawCat.toLowerCase();
+    const existingKey = Object.keys(acc).find(k => k.toLowerCase() === lowerCat);
+    const cat = existingKey || rawCat;
+    
+    (acc[cat] = acc[cat] || []).push(s);
+    return acc;
+  }, {});
+
   if (loading) return <PageLoader />;
 
   const social = profile?.social || {};
@@ -249,87 +259,96 @@ const Home = () => {
       {/* ───── SKILLS ───── */}
       {skills.length > 0 && (
         <Section title="Skills" subtitle="Technologies I work with" className="bg-gray-50/60 dark:bg-gray-900/40">
-          <div className="max-w-4xl mx-auto grid sm:grid-cols-2 gap-4 relative z-10">
-            {skills
-              .slice()
-              .sort((a, b) => b.level - a.level)
-              .slice(0, 5)
-              .map((s, idx) => {
-                const radius = 15;
-                const strokeWidth = 2.5;
-                const circumference = 2 * Math.PI * radius;
-                return (
-                  <motion.div
-                    key={s._id}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.4, delay: idx * 0.05 }}
-                    className="flex items-center gap-4 p-2.5 rounded-xl bg-white/70 dark:bg-gray-800/60 backdrop-blur-xl border border-white/50 dark:border-gray-700/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group/item"
-                  >
-                    {/* Glowing HUD Circle progress on the left */}
-                    <div className="relative w-12 h-12 flex items-center justify-center shrink-0">
-                      <div className="absolute inset-[4px] rounded-full bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm border border-white/40 dark:border-gray-850/60 shadow-inner group-hover/item:scale-105 transition-all duration-300 flex items-center justify-center text-gray-500 dark:text-gray-400 group-hover/item:text-primary-600 dark:group-hover/item:text-primary-400">
-                        {getSkillIcon(s.name)}
-                      </div>
-                      
-                      <svg className="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 40 40">
-                        <defs>
-                          <filter id={`glow-${s._id}`} x="-20%" y="-20%" width="140%" height="140%">
-                            <feGaussianBlur stdDeviation="1" result="blur" />
-                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                          </filter>
-                          <linearGradient id={`grad-${s._id}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="rgb(var(--c-primary-400))" />
-                            <stop offset="100%" stopColor="rgb(var(--c-accent))" />
-                          </linearGradient>
-                        </defs>
-                        
-                        {/* Track Circle */}
-                        <circle
-                          cx="20"
-                          cy="20"
-                          r={radius}
-                          className="stroke-gray-100 dark:stroke-gray-850/30 fill-none"
-                          strokeWidth={strokeWidth}
-                        />
-                        
-                        {/* Progress Circle */}
-                        <motion.circle
-                          cx="20"
-                          cy="20"
-                          r={radius}
-                          stroke={`url(#grad-${s._id})`}
-                          className="fill-none"
-                          strokeWidth={strokeWidth}
-                          strokeLinecap="round"
-                          strokeDasharray={circumference}
-                          filter={`url(#glow-${s._id})`}
-                          initial={{ strokeDashoffset: circumference }}
-                          whileInView={{ strokeDashoffset: circumference - (s.level / 100) * circumference }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1.2, delay: idx * 0.05, ease: "easeOut" }}
-                        />
-                      </svg>
-                    </div>
+          <div className="max-w-4xl mx-auto space-y-10 relative z-10">
+            {Object.entries(grouped).map(([cat, list]) => (
+              <div key={cat} className="space-y-4">
+                {/* Category Title */}
+                <h3 className="text-sm font-bold text-gray-800 dark:text-white capitalize flex items-center gap-2 tracking-wide">
+                  <span className="w-1 h-4 bg-gradient-to-b from-primary-500 to-accent rounded-full" />
+                  {cat}
+                </h3>
+                
+                {/* Skills Grid */}
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {list.map((s, idx) => {
+                    const radius = 15;
+                    const strokeWidth = 2.5;
+                    const circumference = 2 * Math.PI * radius;
+                    return (
+                      <motion.div
+                        key={s._id}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: idx * 0.05 }}
+                        className="flex items-center gap-4 p-2.5 rounded-xl bg-white/70 dark:bg-gray-800/60 backdrop-blur-xl border border-white/50 dark:border-gray-700/80 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group/item"
+                      >
+                        {/* Glowing HUD Circle progress on the left */}
+                        <div className="relative w-12 h-12 flex items-center justify-center shrink-0">
+                          <div className="absolute inset-[4px] rounded-full bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm border border-white/40 dark:border-gray-850/60 shadow-inner group-hover/item:scale-105 transition-all duration-300 flex items-center justify-center text-gray-500 dark:text-gray-400 group-hover/item:text-primary-600 dark:group-hover/item:text-primary-400">
+                            {getSkillIcon(s.name)}
+                          </div>
+                          
+                          <svg className="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 40 40">
+                            <defs>
+                              <filter id={`glow-${s._id}`} x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="1" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                              </filter>
+                              <linearGradient id={`grad-${s._id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="rgb(var(--c-primary-400))" />
+                                <stop offset="100%" stopColor="rgb(var(--c-accent))" />
+                              </linearGradient>
+                            </defs>
+                            
+                            {/* Track Circle */}
+                            <circle
+                              cx="20"
+                              cy="20"
+                              r={radius}
+                              className="stroke-gray-100 dark:stroke-gray-850/30 fill-none"
+                              strokeWidth={strokeWidth}
+                            />
+                            
+                            {/* Progress Circle */}
+                            <motion.circle
+                              cx="20"
+                              cy="20"
+                              r={radius}
+                              stroke={`url(#grad-${s._id})`}
+                              className="fill-none"
+                              strokeWidth={strokeWidth}
+                              strokeLinecap="round"
+                              strokeDasharray={circumference}
+                              filter={`url(#glow-${s._id})`}
+                              initial={{ strokeDashoffset: circumference }}
+                              whileInView={{ strokeDashoffset: circumference - (s.level / 100) * circumference }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 1.2, delay: idx * 0.05, ease: "easeOut" }}
+                            />
+                          </svg>
+                        </div>
 
-                    {/* Metadata detail block */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex justify-between items-center mb-0.5">
-                        <h4 className="text-sm font-bold text-gray-800 dark:text-white capitalize truncate group-hover/item:text-primary-600 dark:group-hover/item:text-primary-400 transition-colors">
-                          {s.name}
-                        </h4>
-                        <span className="text-[10px] font-mono font-bold text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/40 px-2 py-0.5 rounded border border-primary-100 dark:border-primary-900/50">
-                          {s.level}%
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-gray-400 dark:text-gray-500">
-                        {s.level >= 85 ? 'Expert proficiency' : s.level >= 70 ? 'Advanced command' : 'Proficient level'}
-                      </p>
-                    </div>
-                  </motion.div>
-                );
-              })}
+                        {/* Metadata detail block */}
+                        <div className="flex-1 min-w-0">
+                          <div className="flex justify-between items-center mb-0.5">
+                            <h4 className="text-sm font-bold text-gray-800 dark:text-white capitalize truncate group-hover/item:text-primary-600 dark:group-hover/item:text-primary-400 transition-colors">
+                              {s.name}
+                            </h4>
+                            <span className="text-[10px] font-mono font-bold text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/40 px-2 py-0.5 rounded border border-primary-100 dark:border-primary-900/50">
+                              {s.level}%
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-gray-400 dark:text-gray-500">
+                            {s.level >= 85 ? 'Expert proficiency' : s.level >= 70 ? 'Advanced command' : 'Proficient level'}
+                          </p>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </Section>
       )}
