@@ -239,37 +239,64 @@ const Home = () => {
                 {/* Decorative background glow */}
                 <div className="absolute -right-12 -top-12 w-40 h-40 bg-gradient-to-br from-primary-500/20 to-accent/20 rounded-full blur-3xl group-hover:scale-125 transition-transform duration-500" />
                 
-                <h3 className="text-xl font-extrabold text-gray-900 dark:text-white mb-6 flex items-center gap-3 capitalize tracking-tight relative z-10">
+                <h3 className="text-xl font-extrabold text-gray-900 dark:text-white mb-8 flex items-center gap-3 capitalize tracking-tight relative z-10">
                   <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400">
                     <FiZap size={16} className="group-hover:animate-bounce" />
                   </div>
                   {cat}
                 </h3>
                 
-                <div className="space-y-5 relative z-10">
-                  {list.map((s, idx) => (
-                    <div key={s._id} className="relative group/skill cursor-default">
-                      <div className="flex justify-between items-end mb-2">
-                        <span className="text-sm font-bold text-gray-700 dark:text-gray-200 group-hover/skill:text-primary-600 dark:group-hover/skill:text-primary-400 transition-colors">
+                <div className="grid grid-cols-3 gap-x-2 gap-y-6 relative z-10">
+                  {list.map((s, idx) => {
+                    const radius = 22;
+                    const strokeWidth = 3.5;
+                    const circumference = 2 * Math.PI * radius;
+                    return (
+                      <div key={s._id} className="flex flex-col items-center group/skill cursor-default">
+                        <div className="relative w-16 h-16 flex items-center justify-center">
+                          {/* Inner soft background circle */}
+                          <div className="absolute inset-[4px] rounded-full bg-gray-50/50 dark:bg-gray-850/50 group-hover/skill:bg-primary-50/20 dark:group-hover/skill:bg-primary-950/20 transition-all duration-350" />
+                          <svg className="w-full h-full transform -rotate-90" viewBox="0 0 60 60">
+                            <defs>
+                              <linearGradient id={`grad-${s._id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="rgb(var(--c-primary-500))" />
+                                <stop offset="100%" stopColor="rgb(var(--c-accent))" />
+                              </linearGradient>
+                            </defs>
+                            {/* Track Circle */}
+                            <circle
+                              cx="30"
+                              cy="30"
+                              r={radius}
+                              className="stroke-gray-100 dark:stroke-gray-800/80 fill-none"
+                              strokeWidth={strokeWidth}
+                            />
+                            {/* Progress Circle with Gradient & Round Caps */}
+                            <motion.circle
+                              cx="30"
+                              cy="30"
+                              r={radius}
+                              stroke={`url(#grad-${s._id})`}
+                              className="fill-none"
+                              strokeWidth={strokeWidth}
+                              strokeLinecap="round"
+                              strokeDasharray={circumference}
+                              initial={{ strokeDashoffset: circumference }}
+                              whileInView={{ strokeDashoffset: circumference - (s.level / 100) * circumference }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 1.2, delay: 0.1 + (idx * 0.05), ease: "easeOut" }}
+                            />
+                          </svg>
+                          <span className="absolute text-xs font-extrabold text-gray-700 dark:text-gray-300 group-hover/skill:text-primary-600 dark:group-hover/skill:text-primary-400 transition-colors duration-300">
+                            {s.level}%
+                          </span>
+                        </div>
+                        <span className="mt-2.5 text-xs font-bold text-gray-700 dark:text-gray-300 group-hover/skill:text-primary-600 dark:group-hover/skill:text-primary-400 transition-colors duration-300 text-center break-words line-clamp-2 max-w-full px-1 capitalize">
                           {s.name}
                         </span>
-                        <span className="text-[11px] font-black tracking-wider text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800/80 px-2 py-0.5 rounded-full border border-gray-200 dark:border-gray-700">
-                          {s.level}%
-                        </span>
                       </div>
-                      <div className="h-2.5 rounded-full bg-gray-100 dark:bg-gray-800/50 overflow-hidden relative shadow-inner">
-                        <motion.div 
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${s.level}%` }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1, delay: 0.2 + (idx * 0.1), ease: "easeOut" }}
-                          className="absolute left-0 top-0 h-full rounded-full bg-gradient-to-r from-primary-500 to-accent relative overflow-hidden" 
-                        >
-                          <div className="absolute inset-0 bg-white/20 w-1/2 -skew-x-12 -translate-x-full group-hover/skill:-translate-x-0 transition-transform duration-1000 ease-in-out" />
-                        </motion.div>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </motion.div>
             ))}
