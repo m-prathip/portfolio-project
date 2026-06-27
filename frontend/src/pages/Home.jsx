@@ -53,7 +53,6 @@ const getSkillIcon = (name) => {
 const Home = () => {
   const { profile, username } = useOutletContext();
   const [data, setData] = useState({ skills: [], achievements: [], activities: [], projects: [], experience: [], certificates: [] });
-  const [activeCategory, setActiveCategory] = useState('');
   const [loading, setLoading] = useState(true);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [sending, setSending] = useState(false);
@@ -79,23 +78,6 @@ const Home = () => {
   }, [profile, username]);
 
   const { skills = [], achievements = [], activities = [], projects = [], experience = [], certificates = [] } = data || {};
-
-  const grouped = skills.reduce((acc, s) => {
-    let rawCat = (s.category || 'General').trim();
-    const lowerCat = rawCat.toLowerCase();
-    const existingKey = Object.keys(acc).find(k => k.toLowerCase() === lowerCat);
-    const cat = existingKey || rawCat;
-    
-    (acc[cat] = acc[cat] || []).push(s);
-    return acc;
-  }, {});
-
-  useEffect(() => {
-    const cats = Object.keys(grouped);
-    if (cats.length > 0 && !activeCategory) {
-      setActiveCategory(cats[0]);
-    }
-  }, [grouped, activeCategory]);
 
   if (loading) return <PageLoader />;
 
@@ -267,121 +249,98 @@ const Home = () => {
       {/* ───── SKILLS ───── */}
       {skills.length > 0 && (
         <Section title="Skills" subtitle="Technologies I work with" className="bg-gray-50/60 dark:bg-gray-900/40">
-          <div className="max-w-4xl mx-auto">
-            {/* Category Tabs */}
-            <div className="flex flex-wrap justify-center gap-2 mb-10">
-              {Object.keys(grouped).map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(cat)}
-                  className={`relative px-5 py-2.5 rounded-full text-sm font-bold tracking-wide transition-all duration-300 ${
-                    activeCategory === cat
-                      ? 'text-white'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white bg-white/50 dark:bg-gray-800/40 hover:bg-white/80 dark:hover:bg-gray-800/60 border border-gray-100 dark:border-gray-800/80 shadow-sm'
-                  }`}
-                >
-                  {activeCategory === cat && (
-                    <motion.div
-                      layoutId="activeSkillTab"
-                      className="absolute inset-0 bg-gradient-to-r from-primary-600 to-accent rounded-full -z-10 shadow-md shadow-primary-500/20"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  <span className="capitalize relative z-10">{cat}</span>
-                </button>
-              ))}
-            </div>
-
-            {/* Active Category Skills Viewport */}
-            <motion.div
-              key={activeCategory}
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -15 }}
-              transition={{ duration: 0.35 }}
-              className="relative overflow-hidden rounded-3xl p-8 md:p-12 bg-white/70 dark:bg-gray-800/60 backdrop-blur-xl border border-white/50 dark:border-gray-700 shadow-xl group"
-            >
-              {/* Decorative background glow */}
-              <div className="absolute -right-20 -top-20 w-60 h-60 bg-gradient-to-br from-primary-500/10 to-accent/10 rounded-full blur-3xl group-hover:scale-110 transition-transform duration-700" />
-              
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-x-6 gap-y-10 justify-items-center relative z-10">
-                {grouped[activeCategory]?.map((s, idx) => {
-                  const radius = 22;
-                  const strokeWidth = 3;
-                  const circumference = 2 * Math.PI * radius;
-                  return (
-                    <div key={s._id} className="flex flex-col items-center group/skill cursor-default">
-                      <div className="relative w-20 h-20 flex items-center justify-center">
-                        {/* Inner glassmorphic background with logo */}
-                        <div className="absolute inset-[6px] rounded-full bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm border border-white/40 dark:border-gray-800/50 shadow-inner group-hover/skill:scale-105 transition-all duration-300 flex items-center justify-center text-gray-500 dark:text-gray-400 group-hover/skill:text-primary-600 dark:group-hover/skill:text-primary-400">
-                          {getSkillIcon(s.name)}
-                        </div>
-                        
-                        <svg className="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 60 60">
-                          <defs>
-                            {/* Futuristic Glow Filter */}
-                            <filter id={`glow-${s._id}`} x="-20%" y="-20%" width="140%" height="140%">
-                              <feGaussianBlur stdDeviation="1.5" result="blur" />
-                              <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                            </filter>
-                            {/* Gradient */}
-                            <linearGradient id={`grad-${s._id}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                              <stop offset="0%" stopColor="rgb(var(--c-primary-400))" />
-                              <stop offset="100%" stopColor="rgb(var(--c-accent))" />
-                            </linearGradient>
-                          </defs>
-                          
-                          {/* Outer high-tech rotating dotted HUD ring */}
-                          <circle
-                            cx="30"
-                            cy="30"
-                            r={radius + 4}
-                            className="stroke-primary-500/20 dark:stroke-primary-400/20 fill-none animate-[spin_30s_linear_infinite]"
-                            strokeWidth="0.75"
-                            strokeDasharray="3 4"
-                            style={{ transformOrigin: '30px 30px' }}
-                          />
-
-                          {/* Main Track Circle */}
-                          <circle
-                            cx="30"
-                            cy="30"
-                            r={radius}
-                            className="stroke-gray-100 dark:stroke-gray-850/30 fill-none"
-                            strokeWidth={strokeWidth}
-                          />
-                          
-                          {/* Glowing Progress Circle */}
-                          <motion.circle
-                            cx="30"
-                            cy="30"
-                            r={radius}
-                            stroke={`url(#grad-${s._id})`}
-                            className="fill-none"
-                            strokeWidth={strokeWidth}
-                            strokeLinecap="round"
-                            strokeDasharray={circumference}
-                            filter={`url(#glow-${s._id})`}
-                            initial={{ strokeDashoffset: circumference }}
-                            whileInView={{ strokeDashoffset: circumference - (s.level / 100) * circumference }}
-                            viewport={{ once: true }}
-                            transition={{ duration: 1.5, delay: idx * 0.05, ease: "easeOut" }}
-                          />
-                        </svg>
+          <div className="max-w-2xl mx-auto flex flex-col gap-4 relative z-10">
+            {skills
+              .slice()
+              .sort((a, b) => b.level - a.level)
+              .slice(0, 5)
+              .map((s, idx) => {
+                const radius = 22;
+                const strokeWidth = 3;
+                const circumference = 2 * Math.PI * radius;
+                return (
+                  <motion.div
+                    key={s._id}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: idx * 0.08 }}
+                    className="flex items-center gap-5 p-4 rounded-2xl bg-white/70 dark:bg-gray-800/60 backdrop-blur-xl border border-white/50 dark:border-gray-700/80 shadow-sm hover:shadow-md hover:translate-x-1.5 transition-all duration-300 group/item"
+                  >
+                    {/* Glowing HUD Circle progress on the left */}
+                    <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
+                      <div className="absolute inset-[5px] rounded-full bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm border border-white/40 dark:border-gray-850/60 shadow-inner group-hover/item:scale-105 transition-all duration-300 flex items-center justify-center text-gray-500 dark:text-gray-400 group-hover/item:text-primary-600 dark:group-hover/item:text-primary-400">
+                        {getSkillIcon(s.name)}
                       </div>
                       
-                      {/* Name & Percentage underneath */}
-                      <span className="mt-3.5 text-xs font-bold text-gray-800 dark:text-gray-200 group-hover/skill:text-primary-600 dark:group-hover/skill:text-primary-400 transition-colors duration-300 text-center break-words line-clamp-1 max-w-full px-1 capitalize">
-                        {s.name}
-                      </span>
-                      <span className="mt-0.5 text-[10px] font-mono font-semibold tracking-wider text-gray-400 dark:text-gray-500">
-                        {s.level}%
-                      </span>
+                      <svg className="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 60 60">
+                        <defs>
+                          <filter id={`glow-${s._id}`} x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="1.5" result="blur" />
+                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                          </filter>
+                          <linearGradient id={`grad-${s._id}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="rgb(var(--c-primary-400))" />
+                            <stop offset="100%" stopColor="rgb(var(--c-accent))" />
+                          </linearGradient>
+                        </defs>
+                        
+                        {/* Outer rotating dottedHUD ring */}
+                        <circle
+                          cx="30"
+                          cy="30"
+                          r={radius + 4}
+                          className="stroke-primary-500/20 dark:stroke-primary-400/20 fill-none animate-[spin_30s_linear_infinite]"
+                          strokeWidth="0.75"
+                          strokeDasharray="3 4"
+                          style={{ transformOrigin: '30px 30px' }}
+                        />
+
+                        {/* Track Circle */}
+                        <circle
+                          cx="30"
+                          cy="30"
+                          r={radius}
+                          className="stroke-gray-100 dark:stroke-gray-850/30 fill-none"
+                          strokeWidth={strokeWidth}
+                        />
+                        
+                        {/* Progress Circle */}
+                        <motion.circle
+                          cx="30"
+                          cy="30"
+                          r={radius}
+                          stroke={`url(#grad-${s._id})`}
+                          className="fill-none"
+                          strokeWidth={strokeWidth}
+                          strokeLinecap="round"
+                          strokeDasharray={circumference}
+                          filter={`url(#glow-${s._id})`}
+                          initial={{ strokeDashoffset: circumference }}
+                          whileInView={{ strokeDashoffset: circumference - (s.level / 100) * circumference }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 1.2, delay: idx * 0.05, ease: "easeOut" }}
+                        />
+                      </svg>
                     </div>
-                  );
-                })}
-              </div>
-            </motion.div>
+
+                    {/* Metadata detail block */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-center mb-1">
+                        <h4 className="text-base font-extrabold text-gray-850 dark:text-white capitalize truncate group-hover/item:text-primary-600 dark:group-hover/item:text-primary-400 transition-colors">
+                          {s.name}
+                        </h4>
+                        <span className="text-xs font-mono font-bold text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/40 px-2.5 py-0.5 rounded border border-primary-100 dark:border-primary-900/50">
+                          {s.level}%
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-400 dark:text-gray-500">
+                        {s.level >= 85 ? 'Expert level command' : s.level >= 70 ? 'Advanced proficiency' : 'Proficient developer'}
+                      </p>
+                    </div>
+                  </motion.div>
+                );
+              })}
           </div>
         </Section>
       )}
