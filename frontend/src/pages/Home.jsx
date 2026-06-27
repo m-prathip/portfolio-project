@@ -78,17 +78,7 @@ const Home = () => {
     }
   }, [profile, username]);
 
-  if (loading) return <PageLoader />;
-
-  const { skills, achievements, activities, projects, experience, certificates } = data;
-  const social = profile?.social || {};
-  const socialLinks = [
-    { key: 'linkedin', icon: <FiLinkedin />, label: 'LinkedIn' },
-    { key: 'github', icon: <FiGithub />, label: 'GitHub' },
-    { key: 'twitter', icon: <FiTwitter />, label: 'Twitter' },
-    { key: 'instagram', icon: <FiInstagram />, label: 'Instagram' },
-    { key: 'portfolio', icon: <FiExternalLink />, label: 'Portfolio' }
-  ].filter((l) => social[l.key]);
+  const { skills = [], achievements = [], activities = [], projects = [], experience = [], certificates = [] } = data || {};
 
   const grouped = skills.reduce((acc, s) => {
     let rawCat = (s.category || 'General').trim();
@@ -106,6 +96,17 @@ const Home = () => {
       setActiveCategory(cats[0]);
     }
   }, [grouped, activeCategory]);
+
+  if (loading) return <PageLoader />;
+
+  const social = profile?.social || {};
+  const socialLinks = [
+    { key: 'linkedin', icon: <FiLinkedin />, label: 'LinkedIn' },
+    { key: 'github', icon: <FiGithub />, label: 'GitHub' },
+    { key: 'twitter', icon: <FiTwitter />, label: 'Twitter' },
+    { key: 'instagram', icon: <FiInstagram />, label: 'Instagram' },
+    { key: 'portfolio', icon: <FiExternalLink />, label: 'Portfolio' }
+  ].filter((l) => social[l.key]);
 
   const roles = [profile?.title, ...(profile?.domains || [])].filter(Boolean);
   const typed = 'Software Developer';
