@@ -248,30 +248,50 @@ const Home = () => {
                 
                 <div className="grid grid-cols-3 gap-x-2 gap-y-6 relative z-10">
                   {list.map((s, idx) => {
-                    const radius = 22;
-                    const strokeWidth = 3.5;
+                    const radius = 21;
+                    const strokeWidth = 3;
                     const circumference = 2 * Math.PI * radius;
                     return (
                       <div key={s._id} className="flex flex-col items-center group/skill cursor-default">
                         <div className="relative w-16 h-16 flex items-center justify-center">
-                          {/* Inner soft background circle */}
-                          <div className="absolute inset-[4px] rounded-full bg-gray-50/50 dark:bg-gray-850/50 group-hover/skill:bg-primary-50/20 dark:group-hover/skill:bg-primary-950/20 transition-all duration-350" />
-                          <svg className="w-full h-full transform -rotate-90" viewBox="0 0 60 60">
+                          {/* Inner glassmorphic background */}
+                          <div className="absolute inset-[6px] rounded-full bg-white/40 dark:bg-gray-900/40 backdrop-blur-sm border border-white/20 dark:border-gray-800/50 shadow-inner group-hover/skill:scale-105 transition-transform duration-300" />
+                          
+                          <svg className="w-full h-full transform -rotate-90 overflow-visible" viewBox="0 0 60 60">
                             <defs>
+                              {/* Futuristic Glow Filter */}
+                              <filter id={`glow-${s._id}`} x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="1.2" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                              </filter>
+                              {/* Gradient */}
                               <linearGradient id={`grad-${s._id}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stopColor="rgb(var(--c-primary-500))" />
+                                <stop offset="0%" stopColor="rgb(var(--c-primary-400))" />
                                 <stop offset="100%" stopColor="rgb(var(--c-accent))" />
                               </linearGradient>
                             </defs>
-                            {/* Track Circle */}
+                            
+                            {/* Outer high-tech rotating dotted HUD ring */}
+                            <circle
+                              cx="30"
+                              cy="30"
+                              r={radius + 4}
+                              className="stroke-primary-500/20 dark:stroke-primary-400/20 fill-none animate-[spin_20s_linear_infinite]"
+                              strokeWidth="0.75"
+                              strokeDasharray="3 4"
+                              style={{ transformOrigin: '30px 30px' }}
+                            />
+
+                            {/* Main Track Circle */}
                             <circle
                               cx="30"
                               cy="30"
                               r={radius}
-                              className="stroke-gray-100 dark:stroke-gray-800/80 fill-none"
+                              className="stroke-gray-100/80 dark:stroke-gray-800/40 fill-none"
                               strokeWidth={strokeWidth}
                             />
-                            {/* Progress Circle with Gradient & Round Caps */}
+                            
+                            {/* Glowing Progress Circle */}
                             <motion.circle
                               cx="30"
                               cy="30"
@@ -281,17 +301,20 @@ const Home = () => {
                               strokeWidth={strokeWidth}
                               strokeLinecap="round"
                               strokeDasharray={circumference}
+                              filter={`url(#glow-${s._id})`}
                               initial={{ strokeDashoffset: circumference }}
                               whileInView={{ strokeDashoffset: circumference - (s.level / 100) * circumference }}
                               viewport={{ once: true }}
-                              transition={{ duration: 1.2, delay: 0.1 + (idx * 0.05), ease: "easeOut" }}
+                              transition={{ duration: 1.5, delay: 0.05 + (idx * 0.05), ease: "easeOut" }}
                             />
                           </svg>
-                          <span className="absolute text-xs font-extrabold text-gray-700 dark:text-gray-300 group-hover/skill:text-primary-600 dark:group-hover/skill:text-primary-400 transition-colors duration-300">
+                          
+                          {/* Minimal Monospace Percentage Text */}
+                          <span className="absolute text-[10px] font-mono font-bold tracking-tighter text-gray-600 dark:text-gray-300 group-hover/skill:text-primary-600 dark:group-hover/skill:text-primary-400 transition-colors duration-300">
                             {s.level}%
                           </span>
                         </div>
-                        <span className="mt-2.5 text-xs font-bold text-gray-700 dark:text-gray-300 group-hover/skill:text-primary-600 dark:group-hover/skill:text-primary-400 transition-colors duration-300 text-center break-words line-clamp-2 max-w-full px-1 capitalize">
+                        <span className="mt-3 text-[11px] font-semibold tracking-wide text-gray-500 dark:text-gray-400 group-hover/skill:text-primary-600 dark:group-hover/skill:text-primary-400 transition-colors duration-300 text-center break-words line-clamp-2 max-w-full px-1 capitalize">
                           {s.name}
                         </span>
                       </div>
