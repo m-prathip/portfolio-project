@@ -5,7 +5,11 @@ const skillSchema = new mongoose.Schema({
   name: { type: String, required: true },
   level: { type: Number, required: true, min: 0, max: 100 },
   category: { type: String, default: 'General' },
-  order: { type: Number, default: 0 }
+  order: { type: Number, default: 0 },
+  yearsOfExperience: { type: String, default: '' },
+  projectsCount: { type: String, default: '' },
+  keyAreas: { type: String, default: '' },
+  proficiencyLevel: { type: String, default: '' }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Skills', skillSchema);

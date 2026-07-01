@@ -35,43 +35,19 @@ const getProjectCategory = (p) => {
 };
 
 const getPremiumProjectMeta = (p, index) => {
-  const hash = (p.title || '').split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  const score = 95 + (hash % 5); 
-  const completion = 90 + (hash % 11); 
-  const months = 2 + (hash % 3); 
-  
-  const problemSolvedOptions = [
-    "Legacy codebase suffered from bad query performance, low accessibility ratings, and high user drop-off rate.",
-    "Fragmented distributed API endpoints caused high network latency and inconsistent client-side state mapping.",
-    "DevOps pipeline lacked real-time system monitoring, automated builds, and automated alert delivery.",
-    "Heavy asset sizes and lack of static-site caching created massive performance bottlenecks on mobile clients."
-  ];
-  
-  const impactOptions = [
-    "Boosted page performance scores to 99, resulting in a 25% increase in user retention rates.",
-    "Reduced API response times by 40% and improved backend system efficiency by 15%.",
-    "Shortened feature delivery cycle by 35% using modern CI/CD automations.",
-    "Optimized asset loading speeds by 60%, delivering an immediate boost to organic traffic indices."
-  ];
-
-  const featureOptions = [
-    ["Accessible and responsive UI components", "Optimized content rendering pipeline", "Subtle motion animations"],
-    ["Robust microservices synchronization", "Secure user role authentication", "Comprehensive REST/GraphQL endpoints"],
-    ["Automated cloud deployment orchestrations", "Centralized telemetry instrumentation", "Instant incident notifications"],
-    ["Edge-node caching mechanisms", "Clean module loading bundler rules", "Premium responsive CSS designs"]
-  ];
-
-  const idx = hash % 4;
+  const featArray = p.keyFeatures 
+    ? (typeof p.keyFeatures === 'string' ? p.keyFeatures.split(',').map(s => s.trim()) : p.keyFeatures)
+    : [];
 
   return {
-    problemSolved: p.problemSolved || problemSolvedOptions[idx],
-    businessImpact: p.businessImpact || impactOptions[idx],
-    keyFeatures: p.keyFeatures || featureOptions[idx],
-    performanceScore: score,
-    completionPercentage: completion,
-    timeline: `${months} months`,
+    problemSolved: p.problemSolved || "A specialized system designed to address critical performance bottlenecks and scale operations.",
+    businessImpact: p.businessImpact || "Improved customer retention and reduced operational query latency across production environments.",
+    keyFeatures: featArray.length > 0 ? featArray : ["Automated workflows", "Scalable data ingestion", "Responsive visual interface"],
+    performanceScore: p.performanceScore || 98,
+    completionPercentage: p.completionPercentage || 100,
+    timeline: p.timeline || "2 Months",
     responsive: true,
-    status: completion === 100 ? "Production Ready" : "In Active Dev"
+    status: p.status || (p.completionPercentage === 100 ? "Production Ready" : "In Active Dev")
   };
 };
 
@@ -120,10 +96,6 @@ const Projects = () => {
 
   if (loading) return <PageLoader />;
 
-  // Separate Featured and Ordinary for Layout
-  const featured = filtered.find(p => p.featured);
-  const gridProjects = featured ? filtered.filter(p => p._id !== featured._id) : filtered;
-
   return (
     <div className="pt-16 min-h-screen bg-mesh-gradient">
       <Seo
@@ -166,86 +138,9 @@ const Projects = () => {
           <p className="text-center text-gray-500 dark:text-gray-400 py-12">No projects match your criteria.</p>
         ) : (
           <div className="space-y-12 max-w-6xl mx-auto">
-            {/* HERO FEATURED PROJECT */}
-            {featured && (
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="group relative rounded-3xl overflow-hidden glass-premium-light border gradient-border-green shadow-2xl p-6 lg:p-8 flex flex-col lg:flex-row gap-8 items-stretch"
-              >
-                <div className="absolute top-4 left-4 z-10 flex gap-2">
-                  <span className="bg-black/85 text-[#8BEA4E] text-[10px] font-bold px-3 py-1 rounded-full border border-[#8BEA4E]/30 uppercase tracking-wide">
-                    Featured Project
-                  </span>
-                  <span className="bg-green-500 text-black text-[10px] font-extrabold px-3 py-1 rounded-full flex items-center gap-1 shadow-md">
-                    <FiTrendingUp size={11} /> Perf: {featured.meta?.performanceScore}
-                  </span>
-                </div>
-
-                {featured.image && (
-                  <div className="lg:w-1/2 relative min-h-[240px] rounded-2xl overflow-hidden bg-slate-950/20">
-                    <img 
-                      src={asset(featured.image)} 
-                      alt={featured.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" 
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent" />
-                  </div>
-                )}
-
-                <div className="lg:w-1/2 flex flex-col justify-between space-y-4">
-                  <div>
-                    <span className="text-[11px] font-bold uppercase text-[#8BEA4E] tracking-widest">{featured.category}</span>
-                    <h3 className="text-2xl font-extrabold text-gray-900 dark:text-white mt-1 group-hover:text-[#8BEA4E] transition-colors">{featured.title}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-300 mt-2 font-medium">{featured.description}</p>
-                    
-                    <div className="mt-4 p-4 rounded-xl bg-slate-100/50 dark:bg-slate-900/50 border border-black/5 dark:border-white/5 space-y-2">
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        <strong className="text-gray-800 dark:text-white">Problem:</strong> {featured.meta?.problemSolved}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
-                        <strong className="text-[#8BEA4E]">Impact:</strong> {featured.meta?.businessImpact}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div>
-                    {featured.techStack && (
-                      <div className="flex flex-wrap gap-1.5 mb-4">
-                        {featured.techStack.map(t => (
-                          <span key={t} className="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-[#8BEA4E]/10 border border-[#8BEA4E]/20 text-[#8BEA4E]">
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    <div className="flex flex-wrap gap-3 items-center pt-2">
-                      {featured.githubLink && (
-                        <a href={featured.githubLink} target="_blank" rel="noopener noreferrer" className="btn-secondary !py-2 !px-4 text-xs font-semibold">
-                          <FiGithub size={14} /> Github Code
-                        </a>
-                      )}
-                      {featured.liveLink && (
-                        <a href={featured.liveLink} target="_blank" rel="noopener noreferrer" className="btn-primary !bg-[#8BEA4E] !text-black hover:!bg-[#79dd3c] !py-2 !px-4 text-xs font-semibold">
-                          <FiExternalLink size={14} /> Live Demo
-                        </a>
-                      )}
-                      <button 
-                        onClick={() => setActiveCaseStudy(featured)}
-                        className="btn-secondary !py-2 !px-4 text-xs font-semibold border-dashed hover:border-[#8BEA4E] hover:text-[#8BEA4E]"
-                      >
-                        <FiFileText size={14} /> Case Study
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {/* ORDINARY PROJECTS GRID */}
+            {/* PROJECTS GRID */}
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {gridProjects.map((p, idx) => (
+              {filtered.map((p, idx) => (
                 <motion.div 
                   key={p._id}
                   initial={{ opacity: 0, y: 20 }}
