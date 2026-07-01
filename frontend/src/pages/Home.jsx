@@ -164,13 +164,13 @@ const Home = () => {
   const topSkills = skills.slice(0, 6).map((s) => s.name);
 
   // Recruiter stats values
-  const expYears = Math.max(5, experience.length);
+  const achievementsCount = achievements.length || 3;
   const techCount = skills.length || 15;
   const projectCount = projects.length || 10;
   const certCount = certificates.length || 4;
 
   const recruiterStats = [
-    { icon: <FiBriefcase className="text-accent w-5 h-5" />, value: expYears, label: 'Years of Experience', suffix: 'Y+' },
+    { icon: <FiAward className="text-accent w-5 h-5" />, value: achievementsCount, label: 'Achievements', suffix: '+' },
     { icon: <FiCode className="text-accent w-5 h-5" />, value: projectCount, label: 'Projects Shipped', suffix: '+' },
     { icon: <FiZap className="text-accent w-5 h-5" />, value: techCount, label: 'Technologies Mastered', suffix: '+' },
     { icon: <FiAward className="text-accent w-5 h-5" />, value: certCount, label: 'Certifications Issued', suffix: '' }
