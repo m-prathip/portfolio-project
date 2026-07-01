@@ -83,19 +83,19 @@ const AssistantWidget = ({ username, name }) => {
             initial={{ opacity: 0, x: 20, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 20, scale: 0.95 }}
-            className="fixed bottom-[22px] right-20 z-50 bg-[#8BEA4E] text-black text-xs font-bold px-3 py-2 rounded-xl shadow-2xl whitespace-nowrap flex items-center gap-2 border border-[#8BEA4E]/30"
+            className="fixed bottom-[22px] right-20 z-50 bg-accent text-white dark:text-black text-xs font-bold px-3 py-2 rounded-xl shadow-2xl whitespace-nowrap flex items-center gap-2 border border-accent/30"
           >
             <span>{labels[labelIndex]}</span>
-            <button onClick={() => setShowLabel(false)} className="hover:text-red-750 ml-1 transition-colors text-black/60 hover:text-black">
+            <button onClick={() => setShowLabel(false)} className="hover:text-red-750 ml-1 transition-colors text-white/70 dark:text-black/60 hover:text-white dark:hover:text-black">
               <FiX size={13} />
             </button>
-            <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-[#8BEA4E]" />
+            <div className="absolute right-[-6px] top-1/2 -translate-y-1/2 w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[6px] border-l-accent" />
           </motion.div>
         )}
       </AnimatePresence>
 
       <button onClick={() => setOpen((o) => !o)} aria-label="Open assistant"
-        className="fixed bottom-5 right-5 z-50 h-14 w-14 rounded-full bg-[#8BEA4E] hover:bg-[#79dd3c] text-black shadow-2xl flex items-center justify-center transition-transform hover:scale-105">
+        className="fixed bottom-5 right-5 z-50 h-14 w-14 rounded-full bg-accent hover:opacity-90 text-white dark:text-black shadow-2xl flex items-center justify-center transition-transform hover:scale-105">
         {open ? <FiX size={22} /> : <FiMessageSquare size={22} />}
       </button>
 
@@ -103,7 +103,7 @@ const AssistantWidget = ({ username, name }) => {
         <div className="fixed bottom-24 right-5 z-50 w-[calc(100vw-2.5rem)] max-w-sm h-[30rem] flex flex-col
           rounded-2xl overflow-hidden shadow-2xl border border-gray-250 dark:border-slate-800
           bg-white dark:bg-slate-900 animate-slide-up">
-          <div className="px-4 py-3 bg-[#8BEA4E] text-black flex items-center gap-2 font-bold">
+          <div className="px-4 py-3 bg-accent text-white dark:text-black flex items-center gap-2 font-bold">
             <FiMessageSquare size={18} />
             <span className="font-extrabold text-sm">Portfolio Assistant</span>
             <span className="ml-auto text-[10px] bg-black/10 px-2 py-0.5 rounded-full border border-black/10">AI</span>
@@ -114,7 +114,7 @@ const AssistantWidget = ({ username, name }) => {
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[80%] px-3 py-2 rounded-2xl text-xs leading-relaxed ${
                   m.role === 'user'
-                    ? 'bg-[#8BEA4E] text-black font-semibold rounded-br-sm'
+                    ? 'bg-accent text-white dark:text-black font-semibold rounded-br-sm'
                     : 'bg-white dark:bg-slate-900 text-gray-800 dark:text-gray-100 border border-black/5 dark:border-white/5 rounded-bl-sm shadow-sm'}`}>
                   {m.content}
                 </div>
@@ -135,7 +135,7 @@ const AssistantWidget = ({ username, name }) => {
             <div className="px-3 pb-2 flex flex-wrap gap-1.5 bg-gray-50 dark:bg-slate-950">
               {QUICK.map((q) => (
                 <button key={q} onClick={() => send(q)}
-                  className="text-[10px] px-2.5 py-1 rounded-full border border-[#8BEA4E]/30 text-gray-700 dark:text-gray-300 dark:border-slate-800 hover:bg-[#8BEA4E]/10 transition-colors">
+                  className="text-[10px] px-2.5 py-1 rounded-full border border-accent/30 text-gray-700 dark:text-gray-300 dark:border-slate-800 hover:bg-accent/10 transition-colors">
                   {q}
                 </button>
               ))}
@@ -145,9 +145,9 @@ const AssistantWidget = ({ username, name }) => {
           <form onSubmit={(e) => { e.preventDefault(); send(); }}
             className="p-2 border-t border-gray-200 dark:border-slate-800 flex gap-2 bg-white dark:bg-slate-900">
             <input value={input} onChange={(e) => setInput(e.target.value)} placeholder="Ask me anything…"
-              className="flex-1 px-3 py-2 text-xs rounded-xl bg-gray-100 dark:bg-slate-950 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-[#8BEA4E] border border-transparent" />
+              className="flex-1 px-3 py-2 text-xs rounded-xl bg-gray-100 dark:bg-slate-950 text-gray-900 dark:text-gray-100 outline-none focus:ring-2 focus:ring-accent border border-transparent" />
             <button type="submit" disabled={busy}
-              className="h-9 w-9 shrink-0 rounded-xl bg-[#8BEA4E] hover:bg-[#79dd3c] text-black flex items-center justify-center disabled:opacity-50 transition-colors">
+              className="h-9 w-9 shrink-0 rounded-xl bg-accent hover:opacity-90 text-white dark:text-black flex items-center justify-center disabled:opacity-50 transition-colors">
               <FiSend size={16} />
             </button>
           </form>

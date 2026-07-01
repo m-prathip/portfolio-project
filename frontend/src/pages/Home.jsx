@@ -106,7 +106,6 @@ const Home = () => {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
-  const [activeCategory, setActiveCategory] = useState('All');
   const [activeCaseStudy, setActiveCaseStudy] = useState(null);
 
   useEffect(() => {
@@ -170,10 +169,10 @@ const Home = () => {
   const certCount = certificates.length || 4;
 
   const recruiterStats = [
-    { icon: <FiBriefcase className="text-[#8BEA4E] w-5 h-5" />, value: expYears, label: 'Years of Experience', suffix: 'Y+' },
-    { icon: <FiCode className="text-[#8BEA4E] w-5 h-5" />, value: projectCount, label: 'Projects Shipped', suffix: '+' },
-    { icon: <FiZap className="text-[#8BEA4E] w-5 h-5" />, value: techCount, label: 'Technologies Mastered', suffix: '+' },
-    { icon: <FiAward className="text-[#8BEA4E] w-5 h-5" />, value: certCount, label: 'Certifications Issued', suffix: '' }
+    { icon: <FiBriefcase className="text-accent w-5 h-5" />, value: expYears, label: 'Years of Experience', suffix: 'Y+' },
+    { icon: <FiCode className="text-accent w-5 h-5" />, value: projectCount, label: 'Projects Shipped', suffix: '+' },
+    { icon: <FiZap className="text-accent w-5 h-5" />, value: techCount, label: 'Technologies Mastered', suffix: '+' },
+    { icon: <FiAward className="text-accent w-5 h-5" />, value: certCount, label: 'Certifications Issued', suffix: '' }
   ];
 
   const whyHire = [
@@ -210,9 +209,7 @@ const Home = () => {
     meta: getPremiumProjectMeta(p, idx)
   }));
 
-  const filteredProjects = categorizedProjects.filter(
-    p => activeCategory === 'All' || p.category === activeCategory
-  );
+  const filteredProjects = categorizedProjects;
 
 
 
@@ -233,7 +230,7 @@ const Home = () => {
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.6, delay: 0.15 }}
               className="relative mx-auto mt-4 md:mt-0">
               <div className="relative h-40 w-40 sm:h-64 sm:w-64 lg:h-80 lg:w-80">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-[#8BEA4E] to-blue-500 blur-2xl opacity-30 animate-pulse" />
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-accent to-blue-500 blur-2xl opacity-30 animate-pulse" />
                 {profile?.profileImage ? (
                   <img src={asset(profile.profileImage)} alt={profile?.name} loading="lazy"
                     className="relative h-full w-full object-cover rounded-full ring-4 ring-white/60 dark:ring-gray-800 shadow-2xl" />
@@ -249,7 +246,7 @@ const Home = () => {
               className="space-y-6 flex flex-col items-center">
               <span className="inline-flex items-center gap-2 bg-white/70 dark:bg-gray-800/60 backdrop-blur
                 border border-white/40 dark:border-gray-700 text-gray-800 dark:text-gray-200 px-4 py-1.5 rounded-full text-sm font-medium shadow-sm">
-                <span className="w-2.5 h-2.5 bg-[#8BEA4E] green-bullet-glow rounded-full animate-pulse" /> Available for opportunities
+                <span className="w-2.5 h-2.5 bg-accent green-bullet-glow rounded-full animate-pulse" /> Available for opportunities
               </span>
 
               <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 dark:text-white leading-tight break-words text-center">
@@ -259,7 +256,7 @@ const Home = () => {
               </h1>
 
               <p className="text-lg sm:text-2xl text-gray-600 dark:text-gray-300 font-semibold h-8 text-center">
-                {typed}<span className="text-[#8BEA4E] animate-pulse">|</span>
+                {typed}<span className="text-accent animate-pulse">|</span>
               </p>
 
               {profile?.about && <p className="text-gray-500 dark:text-gray-400 max-w-2xl leading-relaxed text-center mx-auto">{profile.about}</p>}
@@ -270,7 +267,7 @@ const Home = () => {
 
               <div className="flex flex-wrap justify-center gap-3 pt-2">
                 {resumeUrl && (
-                  <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="btn-primary !bg-[#8BEA4E] !text-black hover:!bg-[#79dd3c]">
+                  <a href={resumeUrl} target="_blank" rel="noopener noreferrer" className="btn-primary">
                     <FiDownload size={16} /> Resume
                   </a>
                 )}
@@ -312,7 +309,7 @@ const Home = () => {
               className="rounded-2xl p-6 text-center glass-premium-light border gradient-border-green hover-glow-green shadow-lg flex flex-col items-center justify-center animate-float-delayed"
               style={{ animationDelay: `${idx * 0.8}s` }}
             >
-              <div className="mb-3 h-10 w-10 flex items-center justify-center rounded-xl bg-[#8BEA4E]/10 border border-[#8BEA4E]/20 text-[#8BEA4E]">{s.icon}</div>
+              <div className="mb-3 h-10 w-10 flex items-center justify-center rounded-xl bg-accent/10 border border-accent/20 text-accent">{s.icon}</div>
               <div className="text-3xl font-extrabold text-gray-900 dark:text-white">{s.value}{s.suffix}</div>
               <div className="text-xs font-semibold uppercase tracking-wider text-gray-400 dark:text-gray-500 mt-1">{s.label}</div>
             </motion.div>
@@ -326,7 +323,7 @@ const Home = () => {
           <div className="grid sm:grid-cols-2 gap-4">
             {whyHire.map((w, i) => (
               <div key={i} className="flex items-start gap-3 rounded-2xl p-5 bg-white/70 dark:bg-gray-800/60 backdrop-blur border border-white/40 dark:border-gray-700 animate-on-scroll">
-                <FiCheckCircle className="text-[#8BEA4E] shrink-0 mt-0.5" size={20} />
+                <FiCheckCircle className="text-accent shrink-0 mt-0.5" size={20} />
                 <p className="text-gray-700 dark:text-gray-300">{w}</p>
               </div>
             ))}
@@ -357,8 +354,8 @@ const Home = () => {
                   transition={{ duration: 0.5, delay: catIdx * 0.1 }}
                   className="md:col-span-5 space-y-4"
                 >
-                  <h3 className="text-xs font-bold text-[#8BEA4E] uppercase tracking-widest flex items-center gap-2">
-                    <span className="w-1.5 h-3 bg-[#8BEA4E] green-bullet-glow rounded-full" />
+                  <h3 className="text-xs font-bold text-accent uppercase tracking-widest flex items-center gap-2">
+                    <span className="w-1.5 h-3 bg-accent green-bullet-glow rounded-full" />
                     {cat}
                   </h3>
                   
@@ -377,12 +374,12 @@ const Home = () => {
                         >
                           {/* Hover Tooltip Details */}
                           <div className="absolute inset-0 bg-black/90 dark:bg-black/95 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-center p-5 z-20 text-white">
-                            <h5 className="font-bold text-sm text-[#8BEA4E] mb-1">{s.name} Profile</h5>
+                            <h5 className="font-bold text-sm text-accent mb-1">{s.name} Profile</h5>
                             <ul className="text-[11px] space-y-1 text-gray-300">
                               <li>• Level: <span className="text-white font-semibold">{levelName} ({s.level}%)</span></li>
                               <li>• Est. Experience: <span className="text-white font-semibold">{expYearsVal}</span></li>
                               <li>• Projects count: <span className="text-white font-semibold">{projDetails}</span></li>
-                              <li>• Key areas: <span className="text-[#8BEA4E]">{keyAreasVal}</span></li>
+                              <li>• Key areas: <span className="text-accent">{keyAreasVal}</span></li>
                             </ul>
                           </div>
 
@@ -402,13 +399,13 @@ const Home = () => {
                           <div className="z-10">
                             <div className="flex justify-between items-end mb-1">
                               <h4 className="text-sm font-extrabold text-gray-900 dark:text-white capitalize">{s.name}</h4>
-                              <span className="text-xs font-mono font-bold text-[#8BEA4E]">{s.level}%</span>
+                              <span className="text-xs font-mono font-bold text-accent">{s.level}%</span>
                             </div>
 
                             {/* Custom progress bar */}
                             <div className="w-full h-1.5 bg-gray-200 dark:bg-slate-800 rounded-full overflow-hidden">
                               <motion.div 
-                                className="h-full bg-gradient-to-r from-[#8BEA4E] to-emerald-400 rounded-full"
+                                className="h-full bg-gradient-to-r from-accent to-primary-500 rounded-full"
                                 initial={{ width: 0 }}
                                 whileInView={{ width: `${s.level}%` }}
                                 viewport={{ once: true }}
@@ -452,22 +449,7 @@ const Home = () => {
       {projects.length > 0 && (
         <Section title="Projects Showcase" subtitle="Things I've designed, built and shipped" className="bg-mesh-gradient py-16">
           
-          {/* Filters */}
-          <div className="flex flex-wrap justify-center gap-2 mb-10">
-            {['All', 'Frontend', 'Backend', 'AI', 'Data Science', 'Full Stack'].map(cat => (
-              <button 
-                key={cat} 
-                onClick={() => setActiveCategory(cat)}
-                className={`text-xs uppercase tracking-wider px-4 py-2 rounded-full border transition-all duration-300 font-semibold ${
-                  activeCategory === cat 
-                    ? 'bg-[#8BEA4E] text-black border-[#8BEA4E] shadow-lg shadow-[#8BEA4E]/20 scale-105'
-                    : 'bg-white/80 dark:bg-slate-900/80 text-gray-600 dark:text-gray-400 border-white/40 dark:border-slate-800 hover:border-[#8BEA4E]'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
+
 
           <div className="max-w-6xl mx-auto space-y-12">
             {/* PROJECTS GRID */}
@@ -482,15 +464,7 @@ const Home = () => {
                   whileHover={{ y: -6 }}
                   className="group relative flex flex-col rounded-3xl overflow-hidden glass-premium-light border gradient-border-green hover-glow-green shadow-xl transition-all duration-300"
                 >
-                  {/* Status & Perf Scores */}
-                  <div className="absolute top-3 left-3 z-10 flex gap-1.5">
-                    <span className="bg-black/75 text-white text-[9px] font-bold px-2 py-0.5 rounded-full border border-white/10 uppercase tracking-wider">
-                      {p.meta?.status}
-                    </span>
-                    <span className="bg-slate-900 text-[#8BEA4E] text-[9px] font-extrabold px-2 py-0.5 rounded-full border border-[#8BEA4E]/20">
-                      Perf: {p.meta?.performanceScore}
-                    </span>
-                  </div>
+
 
                   {p.image ? (
                     <div className="relative h-44 bg-slate-950/20 overflow-hidden shrink-0">
@@ -498,7 +472,7 @@ const Home = () => {
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent" />
                     </div>
                   ) : (
-                    <div className="h-44 bg-gradient-to-br from-[#8BEA4E]/10 to-blue-500/10 flex items-center justify-center text-4xl font-extrabold text-[#8BEA4E]/50 shrink-0 border-b border-white/5 dark:border-white/5">
+                    <div className="h-44 bg-gradient-to-br from-accent/10 to-blue-500/10 flex items-center justify-center text-4xl font-extrabold text-accent/50 shrink-0 border-b border-white/5 dark:border-white/5">
                       {p.title?.[0]}
                     </div>
                   )}
@@ -506,12 +480,12 @@ const Home = () => {
                   <div className="flex flex-col flex-1 p-5 space-y-4">
                     <div className="flex-1 space-y-2">
                       <div className="flex justify-between items-center">
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#8BEA4E]">{p.category}</span>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-accent">{p.category}</span>
                         <span className="text-[10px] text-gray-400 dark:text-gray-500 flex items-center gap-1">
                           <FiClock size={10} /> {p.meta?.timeline}
                         </span>
                       </div>
-                      <h4 className="font-extrabold text-gray-900 dark:text-white group-hover:text-[#8BEA4E] transition-colors">{p.title}</h4>
+                      <h4 className="font-extrabold text-gray-900 dark:text-white group-hover:text-accent transition-colors">{p.title}</h4>
                       <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-3">{p.description}</p>
                     </div>
 
@@ -524,7 +498,7 @@ const Home = () => {
                             </span>
                           ))}
                           {p.techStack.length > 3 && (
-                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-[#8BEA4E]/10 text-[#8BEA4E]">
+                            <span className="text-[9px] font-bold px-1.5 py-0.5 rounded bg-accent/10 text-accent">
                               +{p.techStack.length - 3}
                             </span>
                           )}
@@ -538,14 +512,14 @@ const Home = () => {
                           </a>
                         )}
                         {p.liveLink && (
-                          <a href={p.liveLink} target="_blank" rel="noopener noreferrer" className="text-gray-500 dark:text-gray-400 hover:text-[#8BEA4E] p-1" title="View Live">
+                          <a href={p.liveLink} target="_blank" rel="noopener noreferrer" className="text-gray-500 dark:text-gray-400 hover:text-accent p-1" title="View Live">
                             <FiExternalLink size={15} />
                           </a>
                         )}
                         
                         <button 
                           onClick={() => setActiveCaseStudy(p)}
-                          className="ml-auto text-xs font-bold text-gray-600 dark:text-gray-400 hover:text-[#8BEA4E] border border-transparent hover:border-[#8BEA4E]/30 rounded px-2.5 py-1 bg-black/5 dark:bg-white/5 transition-colors"
+                          className="ml-auto text-xs font-bold text-gray-600 dark:text-gray-400 hover:text-accent border border-transparent hover:border-accent/30 rounded px-2.5 py-1 bg-black/5 dark:bg-white/5 transition-colors"
                         >
                           Case Study
                         </button>
@@ -585,7 +559,7 @@ const Home = () => {
                 </button>
               </div>
             ) : (
-              <div className="p-6 bg-gradient-to-br from-[#8BEA4E]/10 to-blue-500/10 flex justify-between items-center border-b border-white/5">
+              <div className="p-6 bg-gradient-to-br from-accent/10 to-blue-500/10 flex justify-between items-center border-b border-white/5">
                 <h4 className="font-extrabold text-lg text-gray-900 dark:text-white">Project Case Study</h4>
                 <button 
                   onClick={() => setActiveCaseStudy(null)}
@@ -598,7 +572,7 @@ const Home = () => {
 
             <div className="p-6 space-y-6 max-h-[60vh] overflow-y-auto">
               <div>
-                <span className="text-xs font-bold uppercase tracking-widest text-[#8BEA4E]">{activeCaseStudy.category}</span>
+                <span className="text-xs font-bold uppercase tracking-widest text-accent">{activeCaseStudy.category}</span>
                 <h3 className="text-2xl font-extrabold text-gray-900 dark:text-white mt-1">{activeCaseStudy.title}</h3>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-2 leading-relaxed">{activeCaseStudy.description}</p>
               </div>
@@ -607,7 +581,7 @@ const Home = () => {
               <div className="grid grid-cols-3 gap-4 p-4 rounded-2xl bg-slate-50 dark:bg-slate-950 border border-black/5 dark:border-white/5">
                 <div className="text-center border-r border-black/5 dark:border-white/5">
                   <span className="text-[10px] uppercase font-bold text-gray-400 dark:text-gray-500">Lighthouse Perf</span>
-                  <div className="text-xl font-extrabold text-[#8BEA4E] mt-1">{activeCaseStudy.meta?.performanceScore}</div>
+                  <div className="text-xl font-extrabold text-accent mt-1">{activeCaseStudy.meta?.performanceScore}</div>
                 </div>
                 <div className="text-center border-r border-black/5 dark:border-white/5">
                   <span className="text-[10px] uppercase font-bold text-gray-400 dark:text-gray-500">Completion</span>
@@ -621,7 +595,7 @@ const Home = () => {
 
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#8BEA4E] flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-accent flex items-center gap-1.5">
                     <FiLayers size={13} /> Problem Solved
                   </h4>
                   <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed bg-slate-50/50 dark:bg-slate-950/20 p-3 rounded-xl border border-black/5 dark:border-white/5">
@@ -630,7 +604,7 @@ const Home = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#8BEA4E] flex items-center gap-1.5">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-accent flex items-center gap-1.5">
                     <FiTrendingUp size={13} /> Business Impact
                   </h4>
                   <p className="text-xs text-gray-600 dark:text-gray-300 leading-relaxed bg-slate-50/50 dark:bg-slate-950/20 p-3 rounded-xl border border-black/5 dark:border-white/5">
@@ -640,13 +614,13 @@ const Home = () => {
 
                 {activeCaseStudy.meta?.keyFeatures && (
                   <div className="space-y-2">
-                    <h4 className="text-xs font-bold uppercase tracking-wider text-[#8BEA4E] flex items-center gap-1.5">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-accent flex items-center gap-1.5">
                       <FiMonitor size={13} /> Key Deliverables & Features
                     </h4>
                     <ul className="grid grid-cols-2 gap-2">
                       {activeCaseStudy.meta.keyFeatures.map((feat, fIdx) => (
                         <li key={fIdx} className="text-xs text-gray-600 dark:text-gray-400 flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 bg-[#8BEA4E] rounded-full" />
+                          <span className="w-1.5 h-1.5 bg-accent rounded-full" />
                           {feat}
                         </li>
                       ))}
@@ -669,7 +643,7 @@ const Home = () => {
                   href={activeCaseStudy.liveLink} 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="btn-primary !bg-[#8BEA4E] !text-black hover:!bg-[#79dd3c] !py-1.5 !px-4 text-xs"
+                  className="btn-primary !py-1.5 !px-4 text-xs"
                 >
                   Launch Live App
                 </a>
