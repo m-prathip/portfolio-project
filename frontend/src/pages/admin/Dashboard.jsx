@@ -14,6 +14,7 @@ const adminNav = [
   { to: '/admin/experience', icon: <FiBriefcase size={18} />, label: 'Experience' },
   { to: '/admin/projects', icon: <FiCode size={18} />, label: 'Projects' },
   { to: '/admin/skills', icon: <FiActivity size={18} />, label: 'Skills' },
+  { to: '/admin/whyhire', icon: <FiAward size={18} />, label: 'Why Hire Me' },
   { to: '/admin/achievements', icon: <FiAward size={18} />, label: 'Achievements' },
   { to: '/admin/activities', icon: <FiGlobe size={18} />, label: 'Activities' },
   { to: '/admin/certificates', icon: <FiFileText size={18} />, label: 'Certificates' },

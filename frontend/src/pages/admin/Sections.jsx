@@ -173,3 +173,16 @@ export const AdminCertificates = () => {
   ]} />;
 };
 
+// ------ WHY HIRE ME ------
+import { whyHireAPI } from '../../services/api';
+export const AdminWhyHire = () => {
+  const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const load = () => whyHireAPI.getMine().then(r => setItems(r.data)).catch(() => {}).finally(() => setLoading(false));
+  useEffect(() => { load(); }, []);
+  if (loading) return <PageLoader />;
+  return <AdminCRUD title="Why Hire Me Points" itemLabel="Point" items={items} api={whyHireAPI} onRefresh={load} fields={[
+    { name: 'title', label: 'Why Hire Me Point', required: true, type: 'textarea', placeholder: 'e.g. Shipped 5+ production-ready web applications using React and Node.js.' },
+  ]} />;
+};
+

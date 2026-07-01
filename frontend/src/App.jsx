@@ -40,6 +40,7 @@ const AdminProjects = pick('AdminProjects');
 const AdminAchievements = pick('AdminAchievements');
 const AdminActivities = pick('AdminActivities');
 const AdminCertificates = pick('AdminCertificates');
+const AdminWhyHire = pick('AdminWhyHire');
 
 const App = () => (
   <ThemeProvider>
@@ -73,6 +74,7 @@ const App = () => (
                 <Route path="achievements" element={<AdminAchievements />} />
                 <Route path="activities" element={<AdminActivities />} />
                 <Route path="certificates" element={<AdminCertificates />} />
+                <Route path="whyhire" element={<AdminWhyHire />} />
               </Route>
 
               {/* Public portfolios */}

@@ -15,7 +15,7 @@ import {
 } from 'react-icons/si';
 import {
   skillsAPI, achievementsAPI, activitiesAPI, projectsAPI, experienceAPI,
-  portfolioAPI, certificatesAPI, BASE_URL
+  portfolioAPI, certificatesAPI, whyHireAPI, BASE_URL
 } from '../services/api';
 import Section from '../components/common/Section';
 import Seo from '../components/common/Seo';
@@ -119,14 +119,15 @@ const Home = () => {
         activitiesAPI.getPublic(username).catch(() => ({ data: [] })),
         projectsAPI.getPublic(username).catch(() => ({ data: [] })),
         experienceAPI.getPublic(username).catch(() => ({ data: [] })),
-        certificatesAPI.getPublic(username).catch(() => ({ data: [] }))
-      ]).then(([s, a, ac, p, e, c]) =>
-        setData({ skills: s.data, achievements: a.data, activities: ac.data, projects: p.data, experience: e.data, certificates: c.data })
+        certificatesAPI.getPublic(username).catch(() => ({ data: [] })),
+        whyHireAPI.getPublic(username).catch(() => ({ data: [] }))
+      ]).then(([s, a, ac, p, e, c, w]) =>
+        setData({ skills: s.data, achievements: a.data, activities: ac.data, projects: p.data, experience: e.data, certificates: c.data, whyHire: w.data })
       ).finally(() => setLoading(false));
     }
   }, [profile, username]);
 
-  const { skills = [], achievements = [], activities = [], projects = [], experience = [], certificates = [] } = data || {};
+  const { skills = [], achievements = [], activities = [], projects = [], experience = [], certificates = [], whyHire = [] } = data || {};
 
   // Group skills into the 5 specified categories
   const groupedSkills = {
@@ -175,12 +176,14 @@ const Home = () => {
     { icon: <FiAward className="text-accent w-5 h-5" />, value: certCount, label: 'Certifications Issued', suffix: '' }
   ];
 
-  const whyHire = [
-    profile?.about ? `${(profile.about || '').slice(0, 110)}${profile.about.length > 110 ? '…' : ''}` : null,
-    skills.length ? `Hands-on with ${topSkills.slice(0, 4).join(', ')}${skills.length > 4 ? ' and more' : ''}.` : null,
-    projects.length ? `Shipped ${projects.length} real project${projects.length > 1 ? 's' : ''} you can explore live.` : null,
-    achievements.length ? `${achievements.length} recognised achievement${achievements.length > 1 ? 's' : ''} & certifications.` : null
-  ].filter(Boolean);
+  const whyHireList = whyHire.length > 0 
+    ? whyHire.map(w => w.title)
+    : [
+        profile?.about ? `${(profile.about || '').slice(0, 110)}${profile.about.length > 110 ? '…' : ''}` : null,
+        skills.length ? `Hands-on with ${topSkills.slice(0, 4).join(', ')}${skills.length > 4 ? ' and more' : ''}.` : null,
+        projects.length ? `Shipped ${projects.length} real project${projects.length > 1 ? 's' : ''} you can explore live.` : null,
+        achievements.length ? `${achievements.length} recognised achievement${achievements.length > 1 ? 's' : ''} & certifications.` : null
+      ].filter(Boolean);
 
   const resumeUrl = asset(profile?.resumeUrl);
 
@@ -318,10 +321,10 @@ const Home = () => {
       </Section>
 
       {/* ───── WHY HIRE ME ───── */}
-      {whyHire.length > 0 && (
+      {whyHireList.length > 0 && (
         <Section title="Why hire me?" subtitle="What I bring to your team">
           <div className="grid sm:grid-cols-2 gap-4">
-            {whyHire.map((w, i) => (
+            {whyHireList.map((w, i) => (
               <div key={i} className="flex items-start gap-3 rounded-2xl p-5 bg-white/70 dark:bg-gray-800/60 backdrop-blur border border-white/40 dark:border-gray-700 animate-on-scroll">
                 <FiCheckCircle className="text-accent shrink-0 mt-0.5" size={20} />
                 <p className="text-gray-700 dark:text-gray-300">{w}</p>

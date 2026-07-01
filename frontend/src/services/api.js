@@ -133,6 +133,13 @@ export const certificatesAPI = {
   update: (id, d) => api.put(`/certificates/${id}`, d),
   delete: (id) => api.delete(`/certificates/${id}`)
 };
+export const whyHireAPI = {
+  getMine: () => api.get('/whyhire/me'),
+  getPublic: (u) => api.get(`/whyhire/public/${u}`),
+  create: (d) => api.post('/whyhire', d),
+  update: (id, d) => api.put(`/whyhire/${id}`, d),
+  delete: (id) => api.delete(`/whyhire/${id}`)
+};
 export const portfolioAPI = {
   getMyLink: () => api.get('/portfolio/me/link'),
   qrCodeUrl: (u) => `${BASE_URL}/api/portfolio/${encodeURIComponent(u)}/qrcode`,

@@ -63,6 +63,7 @@ app.use('/api/achievements', require('./routes/achievements'));
 app.use('/api/activities', require('./routes/activities'));
 app.use('/api/certificates', require('./routes/certificates'));
 app.use('/api/portfolio', require('./routes/portfolio'));
+app.use('/api/whyhire', require('./routes/whyHire'));
 
 // Health check
 app.get('/', (req, res) => res.json({ message: 'Portfolio API is running!' }));
