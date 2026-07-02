@@ -28,7 +28,7 @@ function Particles({ color, count = 1400 }) {
 }
 
 // ── Neural network: nodes + edges between nearby nodes ──
-function Neural({ color, count = 320 }) {
+function Neural({ color, count = 140 }) {
   const group = useRef();
   const { nodes, lines } = useMemo(() => {
     const n = new Float32Array(count * 3);
